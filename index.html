@@ -2,233 +2,342 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌍 Fruity World — Earth's Tastiest Treasures</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🍓 Fruity World Explorer!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0b1f16;
-  --bg2: #112b1e;
-  --land: #1e4d33;
-  --land-data: #2a6643;
-  --land-hover: #3d8f5a;
-  --land-selected: #f4b942;
-  --ocean: #071e30;
-  --border: #163826;
-  --panel: #0d2419;
-  --gold: #f4b942;
-  --coral: #ff7659;
-  --mint: #5ddcb0;
-  --text: #dff0e6;
-  --muted: #6fa882;
-  --card-bg: rgba(255,255,255,0.05);
-  --card-hover: rgba(255,255,255,0.1);
+:root{
+  --sky:#b8f0ff;--sky2:#e8faff;
+  --ocean:#5bb8e8;--ocean2:#3a9fd4;
+  --land:#c8f0a0;--land2:#a8dc78;--land-data:#78cc48;--land-sel:#ff6eb4;
+  --panel:#fff8fe;
+  --pink:#ff6eb4;--purple:#c97ff5;--mint:#5de8b0;--gold:#ffcc44;--coral:#ff7a5a;--sky-btn:#5bc8f0;
+  --text:#3a2050;--muted:#9080b0;
+  --r:22px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:linear-gradient(160deg,#fce8ff 0%,#e8f8ff 50%,#fff0fa 100%);font-family:'Nunito',sans-serif;color:var(--text);user-select:none}
 
-/* ── HEADER ── */
+/* ══ HEADER ══ */
 header{
-  position:relative;z-index:20;
-  background:linear-gradient(90deg,#071f12 0%,#0d2e1d 100%);
-  border-bottom:2px solid rgba(244,185,66,0.25);
-  padding:0 24px;
-  height:56px;
-  display:flex;align-items:center;gap:16px;
+  position:relative;z-index:30;
+  background:linear-gradient(90deg,#ff9de2 0%,#ffb347 35%,#85e89d 65%,#87ceeb 100%);
+  padding:0 16px;height:52px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 3px 12px rgba(0,0,0,.15);
 }
 header h1{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:1.7rem;
-  color:var(--gold);letter-spacing:-0.5px;line-height:1;
-  display:flex;align-items:center;gap:8px;
+  font-family:'Fredoka One',cursive;font-size:1.55rem;color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,.18);letter-spacing:.5px;line-height:1;
+  display:flex;align-items:center;gap:7px;
 }
-header .tagline{color:var(--muted);font-size:.8rem;font-weight:600}
-.legend{
-  margin-left:auto;display:flex;align-items:center;gap:16px;font-size:.75rem;color:var(--muted);
+.htag{
+  margin-left:auto;background:rgba(255,255,255,.35);border-radius:100px;
+  padding:4px 12px;font-size:.72rem;font-weight:900;color:#fff;
+  text-shadow:0 1px 0 rgba(0,0,0,.1);white-space:nowrap;
 }
-.legend span{display:flex;align-items:center;gap:5px}
-.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.dot.has{background:var(--land-data);box-shadow:0 0 6px rgba(90,200,130,.5)}
-.dot.sel{background:var(--gold)}
 
-/* ── LAYOUT ── */
-#main{display:flex;width:100%;height:calc(100vh - 56px);overflow:hidden;position:relative}
+/* ══ MAIN LAYOUT ══ */
+#main{
+  display:flex;width:100%;
+  height:calc(100vh - 52px);
+  position:relative;overflow:hidden;
+}
 
-/* ── MAP ── */
-#map-wrap{flex:1;position:relative;overflow:hidden}
-#world-map{width:100%;height:100%;display:block;cursor:crosshair}
-.sphere{fill:var(--ocean)}
-.graticule{fill:none;stroke:rgba(255,255,255,.04);stroke-width:.5}
-.country{fill:var(--land);stroke:var(--border);stroke-width:.4px;transition:fill .18s;cursor:pointer}
+/* ══ MAP SIDE ══ */
+#map-wrap{
+  flex:1;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 50%,#c8ecff 0%,#a0d8f0 100%);
+}
+#world-map{width:100%;height:100%;display:block;touch-action:none}
+.sphere-bg{fill:url(#oceanGrad)}
+.graticule{fill:none;stroke:rgba(255,255,255,.25);stroke-width:.5}
+.country{fill:var(--land);stroke:#fff;stroke-width:.5px;transition:fill .15s,opacity .15s;cursor:pointer}
 .country.has-data{fill:var(--land-data);cursor:pointer}
-.country.has-data:hover,.country:hover{fill:var(--land-hover)}
-.country.selected{fill:var(--land-selected)!important}
+.country.has-data:hover{fill:#96e050}
+.country.selected{fill:var(--land-sel)!important;stroke:#ff3d8c;stroke-width:1.5px}
+.country:not(.has-data){cursor:default}
 
-/* Pulse markers */
-.pulse-dot{cursor:pointer}
-.pulse-circle{fill:var(--gold);opacity:.7;animation:pd 2.2s ease-in-out infinite}
-.pulse-ring{fill:none;stroke:var(--gold);stroke-width:1;opacity:0;animation:pr 2.2s ease-in-out infinite}
-@keyframes pd{0%,100%{r:3;opacity:.7}50%{r:4;opacity:1}}
-@keyframes pr{0%{r:4;opacity:.5}100%{r:9;opacity:0}}
+/* ══ PULSE MARKERS ══ */
+.pulse-dot{cursor:pointer;pointer-events:all}
+.p-ring{fill:none;stroke:#ff6eb4;stroke-width:1.5;animation:pring 2s ease-out infinite}
+.p-dot{fill:#ff6eb4;filter:drop-shadow(0 0 3px #ff6eb4)}
+@keyframes pring{0%{r:4;opacity:.8}100%{r:10;opacity:0}}
 
-/* Tooltip */
+/* ══ TOOLTIP ══ */
 #tip{
-  position:fixed;pointer-events:none;z-index:200;
-  background:rgba(10,30,20,.95);border:1px solid rgba(244,185,66,.4);
-  border-radius:8px;padding:5px 12px;font-size:.78rem;font-weight:700;
-  color:var(--gold);opacity:0;transition:opacity .1s;white-space:nowrap;
+  position:fixed;pointer-events:none;z-index:999;
+  background:linear-gradient(135deg,#ff6eb4,#c97ff5);
+  border-radius:100px;padding:5px 14px;
+  font-family:'Fredoka One',cursive;font-size:.85rem;color:#fff;
+  opacity:0;transition:opacity .12s;white-space:nowrap;
+  box-shadow:0 4px 12px rgba(200,50,150,.35);
 }
 
-/* Hint bar */
+/* ══ HINT ══ */
 #hint{
-  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
-  background:rgba(10,30,20,.88);border:1px solid rgba(244,185,66,.25);
-  border-radius:100px;padding:7px 20px;font-size:.78rem;color:var(--muted);
-  pointer-events:none;animation:fadein 1s ease 1.2s both;white-space:nowrap;
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  background:rgba(255,255,255,.85);backdrop-filter:blur(8px);
+  border:2px solid rgba(255,110,180,.4);border-radius:100px;
+  padding:8px 20px;font-size:.78rem;font-weight:900;color:var(--pink);
+  pointer-events:none;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(255,110,180,.2);
+  animation:bounceIn .8s cubic-bezier(.34,1.56,.64,1) .5s both;
 }
-@keyframes fadein{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes bounceIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-/* ── SIDE PANEL ── */
+/* ══ SIDE PANEL (desktop) ══ */
 #panel{
-  width:0;min-width:0;
-  background:var(--panel);
-  border-left:2px solid rgba(244,185,66,.18);
+  width:0;min-width:0;background:var(--panel);
+  border-left:3px solid rgba(255,110,180,.25);
   display:flex;flex-direction:column;
-  transition:width .45s cubic-bezier(.34,1.56,.64,1),min-width .45s cubic-bezier(.34,1.56,.64,1);
-  overflow:hidden;z-index:10;
+  transition:width .4s cubic-bezier(.34,1.56,.64,1),min-width .4s cubic-bezier(.34,1.56,.64,1);
+  overflow:hidden;z-index:10;position:relative;
 }
-#panel.open{width:360px;min-width:360px}
+#panel.open{width:340px;min-width:340px}
 
-.panel-top{
-  padding:18px 18px 14px;
-  background:linear-gradient(135deg,var(--bg2) 0%,rgba(42,102,67,.25) 100%);
-  border-bottom:1px solid rgba(244,185,66,.15);
-  position:relative;flex-shrink:0;
+/* ══ BOTTOM SHEET (mobile) ══ */
+#bottom-sheet{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:var(--panel);
+  border-radius:24px 24px 0 0;
+  box-shadow:0 -8px 32px rgba(200,80,180,.2);
+  border-top:3px solid rgba(255,110,180,.3);
+  transform:translateY(100%);
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1);
+  max-height:70vh;display:none;flex-direction:column;
 }
-.cname{
-  font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;
-  color:var(--gold);display:flex;align-items:center;gap:8px;line-height:1.1;
+#bottom-sheet.open{transform:translateY(0)}
+.sheet-handle{
+  width:40px;height:5px;background:rgba(200,100,200,.3);
+  border-radius:3px;margin:10px auto 6px;flex-shrink:0;
 }
-.csub{color:var(--muted);font-size:.75rem;margin-top:3px}
-.close{
+
+/* ══ PANEL CONTENT ══ */
+.panel-header{
+  padding:16px 16px 12px;
+  background:linear-gradient(135deg,#ffe8f8 0%,#f0e8ff 100%);
+  border-bottom:2px solid rgba(255,110,180,.15);
+  flex-shrink:0;position:relative;
+}
+.country-flag{font-size:2rem;line-height:1}
+.country-name{
+  font-family:'Fredoka One',cursive;font-size:1.45rem;color:var(--pink);
+  letter-spacing:.3px;line-height:1.1;
+}
+.country-sub{color:var(--muted);font-size:.75rem;font-weight:800;margin-top:2px}
+.close-btn{
   position:absolute;top:14px;right:14px;
-  background:rgba(244,185,66,.15);border:1px solid rgba(244,185,66,.35);
-  color:var(--gold);width:26px;height:26px;border-radius:50%;
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,#ff6eb4,#c97ff5);
+  border:none;color:#fff;font-size:1rem;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:.85rem;transition:all .2s;
+  cursor:pointer;box-shadow:0 3px 8px rgba(200,50,150,.35);
 }
-.close:hover{background:var(--gold);color:var(--bg)}
 
-/* Fruit grid */
-.fgrid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-  padding:14px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;
+/* ══ FRUIT GRID ══ */
+.fruit-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;padding:12px;
+  border-bottom:2px solid rgba(255,110,180,.12);
+  flex-shrink:0;
 }
-.fc{
-  background:var(--card-bg);border:2px solid transparent;
-  border-radius:14px;padding:10px 6px;text-align:center;
-  cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);
+.fruit-card{
+  border-radius:16px;padding:10px 6px 8px;
+  text-align:center;cursor:pointer;position:relative;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;
+  border:3px solid transparent;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
-.fc:hover{transform:translateY(-4px) scale(1.06);background:var(--card-hover);border-color:rgba(244,185,66,.35)}
-.fc.sel{border-color:var(--gold);background:rgba(244,185,66,.12);transform:translateY(-4px) scale(1.06)}
-.fe{font-size:1.9rem;display:block;margin-bottom:3px}
-.fn{font-family:'Baloo 2',cursive;font-size:.67rem;font-weight:700;color:var(--text);line-height:1.2}
+.fruit-card:hover,.fruit-card:active{transform:translateY(-5px) scale(1.08);box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.fruit-card.sel{border-color:#ff3d8c;transform:translateY(-5px) scale(1.08);box-shadow:0 8px 20px rgba(255,60,140,.3)}
+.fc-emoji{font-size:2rem;display:block;margin-bottom:4px;line-height:1}
+.fc-blush-l,.fc-blush-r{
+  position:absolute;width:13px;height:9px;
+  background:rgba(255,100,150,.3);border-radius:50%;
+  bottom:30px;pointer-events:none;
+}
+.fc-blush-l{left:6px}.fc-blush-r{right:6px}
+.fc-name{font-family:'Fredoka One',cursive;font-size:.65rem;color:var(--text);line-height:1.2}
+.fc-sparkle{
+  position:absolute;top:-4px;right:-4px;font-size:.75rem;
+  animation:spin1 3s linear infinite;pointer-events:none;
+}
+@keyframes spin1{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.3) rotate(180deg)}}
 
-/* bounce stagger */
-.fc:nth-child(1) .fe{animation:bounce 2.4s ease-in-out .0s infinite}
-.fc:nth-child(2) .fe{animation:bounce 2.4s ease-in-out .35s infinite}
-.fc:nth-child(3) .fe{animation:bounce 2.4s ease-in-out .7s infinite}
-.fc:nth-child(4) .fe{animation:bounce 2.4s ease-in-out 1.05s infinite}
-.fc:nth-child(5) .fe{animation:bounce 2.4s ease-in-out 1.4s infinite}
-.fc:nth-child(6) .fe{animation:bounce 2.4s ease-in-out 1.75s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* Stagger bounce on fruit emojis */
+.fruit-card:nth-child(1) .fc-emoji{animation:bobble 2.5s ease-in-out 0s infinite}
+.fruit-card:nth-child(2) .fc-emoji{animation:bobble 2.5s ease-in-out .3s infinite}
+.fruit-card:nth-child(3) .fc-emoji{animation:bobble 2.5s ease-in-out .6s infinite}
+.fruit-card:nth-child(4) .fc-emoji{animation:bobble 2.5s ease-in-out .9s infinite}
+.fruit-card:nth-child(5) .fc-emoji{animation:bobble 2.5s ease-in-out 1.2s infinite}
+.fruit-card:nth-child(6) .fc-emoji{animation:bobble 2.5s ease-in-out 1.5s infinite}
+.fruit-card:nth-child(7) .fc-emoji{animation:bobble 2.5s ease-in-out 1.8s infinite}
+.fruit-card:nth-child(8) .fc-emoji{animation:bobble 2.5s ease-in-out 2.1s infinite}
+@keyframes bobble{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
 
-/* Detail pane */
-#detail{flex:1;overflow-y:auto;padding:14px}
-#detail::-webkit-scrollbar{width:3px}
-#detail::-webkit-scrollbar-thumb{background:rgba(244,185,66,.3);border-radius:2px}
+/* ══ DETAIL PANE ══ */
+#detail{flex:1;overflow-y:auto;padding:14px;overscroll-behavior:contain}
+#detail::-webkit-scrollbar{width:4px}
+#detail::-webkit-scrollbar-thumb{background:rgba(200,100,200,.3);border-radius:2px}
 
 .empty-state{
-  height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:10px;color:var(--muted);font-size:.82rem;text-align:center;padding:20px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px 20px;gap:10px;color:var(--muted);font-weight:800;text-align:center;font-size:.82rem;
 }
-.empty-state .big{font-size:2.5rem;animation:spin 5s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state .big-emoji{font-size:3.5rem;animation:spin2 4s ease-in-out infinite}
+@keyframes spin2{0%,100%{transform:rotate(-10deg) scale(1)}50%{transform:rotate(10deg) scale(1.1)}}
 
-.dname{
-  font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:var(--gold);
-  display:flex;align-items:center;gap:10px;margin-bottom:6px;
+/* Fruit detail */
+.detail-hero{
+  text-align:center;padding:14px 10px 10px;
+  background:linear-gradient(135deg,#fff0fa 0%,#f0f8ff 100%);
+  border-radius:18px;margin-bottom:12px;position:relative;overflow:hidden;
 }
-.ddesc{font-size:.82rem;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.hero-emoji-wrap{
+  position:relative;display:inline-block;
+  width:80px;height:80px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 6px;
+}
+.hero-emoji{font-size:3rem;line-height:1;animation:float1 3s ease-in-out infinite}
+.hero-blush{
+  position:absolute;width:18px;height:12px;
+  background:rgba(255,100,140,.3);border-radius:50%;
+  bottom:12px;
+}
+.hero-blush.l{left:4px}.hero-blush.r{right:4px}
+.deco-star{position:absolute;font-size:1.1rem;animation:twinkle 1.8s ease-in-out infinite}
+.deco-star:nth-child(1){top:8px;left:12px;animation-delay:0s}
+.deco-star:nth-child(2){top:8px;right:12px;animation-delay:.4s}
+.deco-star:nth-child(3){bottom:8px;left:20px;animation-delay:.8s}
+.deco-star:nth-child(4){bottom:8px;right:20px;animation-delay:1.2s}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes twinkle{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:1}}
+.detail-name{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--pink)}
+.detail-desc{font-size:.77rem;color:var(--muted);font-weight:700;line-height:1.55;margin-top:4px}
 
-.fact-box{
-  background:rgba(244,185,66,.09);border-left:3px solid var(--gold);
-  border-radius:0 8px 8px 0;padding:10px 13px;
-  font-size:.8rem;color:var(--text);line-height:1.55;margin-bottom:14px;
+.fun-fact{
+  background:linear-gradient(135deg,#fff7e0 0%,#fff0f8 100%);
+  border-left:4px solid var(--gold);border-radius:0 14px 14px 0;
+  padding:10px 12px;font-size:.77rem;color:var(--text);line-height:1.55;
+  margin-bottom:12px;font-weight:700;
 }
-.fact-box b{color:var(--gold);font-family:'Baloo 2',cursive}
+.fun-fact b{color:#e07000;font-family:'Fredoka One',cursive;font-size:.85rem}
 
 .sh3{
-  font-family:'Baloo 2',cursive;font-size:.78rem;font-weight:700;
-  color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;
+  font-family:'Fredoka One',cursive;font-size:.8rem;
+  color:var(--purple);text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:8px;display:flex;align-items:center;gap:5px;
 }
 
-.srow{display:flex;align-items:center;gap:9px;margin-bottom:7px}
-.slabel{font-size:.73rem;color:var(--muted);width:78px;flex-shrink:0}
-.strack{flex:1;background:rgba(255,255,255,.07);border-radius:100px;height:7px;overflow:hidden}
-.sbar{height:100%;border-radius:100px;transition:width .7s cubic-bezier(.34,1.56,.64,1)}
-.sval{font-size:.72rem;color:var(--text);font-weight:700;width:36px;text-align:right;flex-shrink:0}
+/* Taste bars */
+.taste-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.taste-label{font-size:.7rem;font-weight:900;color:var(--muted);width:72px;flex-shrink:0}
+.taste-track{flex:1;background:rgba(200,150,220,.15);border-radius:100px;height:10px;overflow:hidden}
+.taste-bar{height:100%;border-radius:100px;transition:width .7s cubic-bezier(.34,1.56,.64,1)}
+.taste-val{font-size:.7rem;font-weight:900;color:var(--text);width:40px;text-align:right;flex-shrink:0}
 
-.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:13px}
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
 .tag{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
-  border-radius:100px;padding:3px 10px;font-size:.7rem;color:var(--muted);
+  background:linear-gradient(135deg,#ffe8f8,#f0e8ff);
+  border:1.5px solid rgba(200,100,200,.25);border-radius:100px;
+  padding:3px 10px;font-size:.68rem;font-weight:900;color:var(--purple);
 }
 
-/* Ambient floaters */
-.floater{
-  position:fixed;font-size:1.6rem;opacity:.05;pointer-events:none;z-index:0;
-  animation:float var(--d,8s) ease-in-out var(--dl,0s) infinite;
+/* Season badge */
+.season-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,#e8fff0,#e8f8ff);
+  border:1.5px solid rgba(80,200,150,.3);border-radius:100px;
+  padding:4px 12px;font-size:.72rem;font-weight:900;color:#2a8a60;
+  margin-bottom:10px;
 }
-@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-30px) rotate(15deg)}}
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 700px){
+  #panel{display:none!important}
+  #bottom-sheet{display:flex!important}
+  #main{display:block}
+  #map-wrap{width:100%;height:100%}
+  .fruit-grid{grid-template-columns:repeat(4,1fr);gap:6px;padding:8px}
+  .fc-name{font-size:.58rem}
+  #panel.open{display:none}
+}
+@media (min-width:701px){
+  #bottom-sheet{display:none!important}
+}
+
+/* ══ FLOATING DECO ══ */
+.float-deco{
+  position:fixed;font-size:1.8rem;opacity:.1;pointer-events:none;z-index:0;
+  animation:fdrift var(--d,7s) ease-in-out var(--dl,0s) infinite;
+}
+@keyframes fdrift{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-25px) rotate(5deg)}}
 </style>
 </head>
 <body>
 
-<!-- Ambient floaters -->
-<div class="floater" style="left:5%;bottom:15%;--d:7s;--dl:0s">🍋</div>
-<div class="floater" style="left:12%;top:30%;--d:9s;--dl:1s">🍇</div>
-<div class="floater" style="left:22%;bottom:25%;--d:6s;--dl:2s">🥭</div>
-<div class="floater" style="left:35%;top:15%;--d:8s;--dl:.5s">🍊</div>
-<div class="floater" style="right:45%;bottom:10%;--d:10s;--dl:1.5s">🍍</div>
-<div class="floater" style="right:12%;top:25%;--d:7.5s;--dl:.8s">🍓</div>
-<div class="floater" style="right:5%;bottom:30%;--d:9s;--dl:2.5s">🫐</div>
-<div class="floater" style="left:55%;top:10%;--d:6.5s;--dl:3s">🍒</div>
+<div class="float-deco" style="left:3%;top:20%;--d:6s;--dl:0s">🍒</div>
+<div class="float-deco" style="left:8%;bottom:25%;--d:8s;--dl:1s">🍋</div>
+<div class="float-deco" style="left:18%;top:35%;--d:5.5s;--dl:2s">🍇</div>
+<div class="float-deco" style="right:42%;top:10%;--d:7s;--dl:.5s">🥭</div>
+<div class="float-deco" style="right:18%;top:20%;--d:9s;--dl:1.5s">🍓</div>
+<div class="float-deco" style="right:5%;bottom:20%;--d:6.5s;--dl:2.5s">🍍</div>
+<div class="float-deco" style="left:50%;bottom:15%;--d:7.5s;--dl:.8s">🫐</div>
 
 <header>
-  <h1>🌍 Fruity World</h1>
-  <span class="tagline">Click a country to discover its exotic fruits</span>
-  <div class="legend">
-    <span><span class="dot has"></span>Has fruit data</span>
-    <span><span class="dot sel"></span>Selected</span>
-  </div>
+  <h1>🍓 Fruity World Explorer!</h1>
+  <div class="htag">Tap a country ✨</div>
 </header>
 
 <div id="main">
   <div id="map-wrap">
     <svg id="world-map"></svg>
-    <div id="hint">🌿 Click any glowing country to explore its fruits</div>
+    <div id="hint">🌍 Tap a colourful country to discover its fruits!</div>
   </div>
+
+  <!-- Desktop side panel -->
   <div id="panel">
-    <div class="panel-top">
-      <div class="cname" id="cname">Country</div>
-      <div class="csub" id="csub">Select a fruit below</div>
-      <div class="close" id="close-btn">✕</div>
+    <div class="panel-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="country-flag" id="panel-flag">🌍</div>
+        <div>
+          <div class="country-name" id="panel-name">Pick a Country!</div>
+          <div class="country-sub" id="panel-sub">Tap a glowing green country</div>
+        </div>
+      </div>
+      <button class="close-btn" id="close-desktop">✕</button>
     </div>
-    <div class="fgrid" id="fgrid"></div>
+    <div class="fruit-grid" id="fruit-grid-desktop"></div>
     <div id="detail">
       <div class="empty-state">
-        <div class="big">🍉</div>
-        <div>Pick a fruit above<br>to see its secrets!</div>
+        <div class="big-emoji">🍉</div>
+        <div>Choose a fruit above<br>to see its secrets! ✨</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile bottom sheet -->
+  <div id="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="panel-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="country-flag" id="sheet-flag">🌍</div>
+        <div>
+          <div class="country-name" id="sheet-name">Pick a Country!</div>
+          <div class="country-sub" id="sheet-sub">Tap a glowing green country</div>
+        </div>
+      </div>
+      <button class="close-btn" id="close-mobile">✕</button>
+    </div>
+    <div class="fruit-grid" id="fruit-grid-mobile"></div>
+    <div id="detail-mobile" style="flex:1;overflow-y:auto;padding:14px;overscroll-behavior:contain">
+      <div class="empty-state">
+        <div class="big-emoji">🍑</div>
+        <div>Choose a fruit above<br>to see its secrets! ✨</div>
       </div>
     </div>
   </div>
@@ -238,616 +347,523 @@ header .tagline{color:var(--muted);font-size:.8rem;font-weight:600}
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
-// ─── FRUIT DATA ───────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// FRUIT DATA — 36 countries
+// ═══════════════════════════════════════════════════════════
 const DATA = {
-  76: { name:"Brazil", flag:"🇧🇷", fruits:[
-    { name:"Açaí", emoji:"🫐", color:"#6b30a0",
-      desc:"Deep purple berries from Amazonian palm trees, celebrated worldwide as a superfood powerhouse.",
-      fact:"<b>🌿 Wild fact:</b> Açaí berries must be eaten or processed within 24 hours of harvest — they spoil insanely fast! The whole Amazon rainforest races against the clock.",
-      sweet:35, acid:25, bitter:45, vitC:9, cal:70, water:85,
-      season:"Jan–Jun", tags:["Superfood","Amazon","Antioxidant","Purple"] },
-    { name:"Cupuaçu", emoji:"🥥", color:"#8b5e3c",
-      desc:"A creamy, chocolate-adjacent fruit that smells like a mix of chocolate and pineapple — utterly unique.",
-      fact:"<b>☕ Chocolate cousin:</b> Cupuaçu is closely related to cacao and its seeds can be processed into 'cupulate', a chocolate-like substance.",
-      sweet:55, acid:40, bitter:20, vitC:32, cal:49, water:83,
-      season:"Jan–Apr", tags:["Creamy","Chocolate note","Aromatic","Rare"] },
-    { name:"Passion Fruit", emoji:"💜", color:"#7e2d8e",
-      desc:"A wrinkled purple-yellow orb hiding a fragrant, seedy pulp with an intensely tropical aroma.",
-      fact:"<b>🌺 Name origin:</b> Spanish missionaries named it 'Flor de la Pasión' — the flower's parts symbolized the Passion of Christ.",
-      sweet:55, acid:80, bitter:15, vitC:30, cal:97, water:73,
-      season:"Mar–Sep", tags:["Tropical","Fragrant","Tangy","Vine fruit"] },
-    { name:"Jabuticaba", emoji:"🍇", color:"#2d0a4e",
-      desc:"Brazil's weirdest wonder: grapes that grow directly ON the tree bark, not on vines.",
-      fact:"<b>🌳 Tree grapes:</b> Jabuticaba fruits burst straight from the trunk and branches — the tree looks like it's covered in polka dots!",
-      sweet:65, acid:30, bitter:20, vitC:23, cal:58, water:82,
-      season:"Sep–Nov", tags:["Trunk-fruit","Unique","Port-wine flavor","Endemic"] },
-    { name:"Guaraná", emoji:"🟤", color:"#7a3e0e",
-      desc:"A climbing plant whose seeds contain twice the caffeine of coffee beans and power Brazil's iconic soft drink.",
-      fact:"<b>⚡ Energy bomb:</b> Guaraná seeds pack ~3.6% caffeine — double what you'd find in a coffee bean. The Sateré-Mawé people have used it for centuries.",
-      sweet:20, acid:15, bitter:70, vitC:2, cal:45, water:75,
-      season:"Sep–Dec", tags:["Caffeine","Energy","Amazonian","Stimulant"] },
+  76:{ name:"Brazil",flag:"🇧🇷", fruits:[
+    {name:"Açaí",emoji:"🫐",bg:"#9b59b6",sweet:35,acid:20,bitter:40,vitC:9,fun:"🐆 Açaí berries MUST be eaten within 24 hours of harvest — they spoil super fast! The whole Amazon races the clock to enjoy them.",desc:"Deep purple berries from tall Amazonian palm trees, famous worldwide as a superfood. Full of antioxidants!",season:"Jan–Jun",tags:["Superfood","Amazon","Purple power","Smoothie bowl star"]},
+    {name:"Cupuaçu",emoji:"🥥",bg:"#8b5e3c",sweet:55,acid:40,bitter:20,vitC:32,fun:"☕ Cupuaçu seeds can be made into 'cupulate' — a chocolate-like treat! It's basically chocolate's wild Amazon cousin.",desc:"Super creamy fruit that smells like a mix of chocolate and pineapple! One of the most unique smells in the whole fruit world.",season:"Jan–Apr",tags:["Creamy","Chocolate cousin","Amazon","Rare"]},
+    {name:"Passion Fruit",emoji:"💜",bg:"#7e2d8e",sweet:55,acid:80,bitter:15,vitC:30,fun:"🌺 Spanish missionaries named it 'Flor de la Pasión' because the flower's parts reminded them of the Passion of Christ!",desc:"A wrinkly purple orb hiding sweet-tangy seeds inside. Super fragrant and tropical — often used in juices and desserts.",season:"Mar–Sep",tags:["Tangy","Tropical","Fragrant","Juice queen"]},
+    {name:"Jabuticaba",emoji:"🍇",bg:"#2d0a4e",sweet:65,acid:30,bitter:20,vitC:23,fun:"🌳 Jabuticaba grows DIRECTLY on the tree bark — not on branches or vines! The tree looks like it has purple polka dots!",desc:"Brazil's weirdest, most amazing fruit: grapes that grow straight out of the tree trunk! Looks like polka dots!",season:"Sep–Nov",tags:["Trunk grapes","Bizarre","Endemic","Port wine flavour"]},
+    {name:"Guaraná",emoji:"🟤",bg:"#7a3e0e",sweet:20,acid:15,bitter:70,vitC:2,fun:"⚡ Guaraná seeds have DOUBLE the caffeine of coffee beans! The Sateré-Mawé people have used it for centuries as energy.",desc:"A climbing plant whose seeds power Brazil's famous energy soda. Each red berry contains a 'staring eye' seed inside!",season:"Sep–Dec",tags:["Energy","Caffeine","Amazonian","Soda ingredient"]},
+    {name:"Pitanga",emoji:"🍒",bg:"#e03030",sweet:50,acid:60,bitter:25,vitC:99,fun:"🌡️ Pitanga is also called Surinam Cherry! It changes colour from green to yellow to orange to deep red as it ripens — like a tiny traffic light!",desc:"A tiny ridged cherry-like fruit that changes colour as it ripens. Super high in vitamin C! A beloved backyard fruit across Brazil.",season:"Aug–Oct",tags:["Vitamin C","Ridged shape","Backyard gem","Colour-changer"]},
   ]},
-  840: { name:"United States", flag:"🇺🇸", fruits:[
-    { name:"Blueberry", emoji:"🫐", color:"#3a5fa0",
-      desc:"Plump, indigo berries native to North America, packed with antioxidants and famously versatile.",
-      fact:"<b>🦅 Native treasure:</b> Blueberries are one of the few fruits truly native to North America. Indigenous peoples dried them as 'Saskatoons' for winter survival.",
-      sweet:70, acid:35, bitter:10, vitC:14, cal:57, water:84,
-      season:"Jun–Aug", tags:["Antioxidant","Native","Summer","Superfood"] },
-    { name:"Cranberry", emoji:"❤️", color:"#c0392b",
-      desc:"Tart, fire-engine red berries that bounce when ripe (that's actually how farmers sort them!).",
-      fact:"<b>🏀 Bounce test:</b> Ripe cranberries bounce like rubber balls. Farmers call this the 'bounce board test' — it's been used since the 1880s.",
-      sweet:15, acid:90, bitter:40, vitC:14, cal:46, water:87,
-      season:"Sep–Nov", tags:["Tart","Bog fruit","UTI remedy","Thanksgiving"] },
-    { name:"Concord Grape", emoji:"🍇", color:"#4a235a",
-      desc:"The dark, musky grape behind America's beloved purple grape juice and PB&J jelly.",
-      fact:"<b>🍇 Slip-skin magic:</b> Concords have 'slip skins' — the purple skin pops right off and the flesh inside is sweet green. The flavor inspired artificial grape candy.",
-      sweet:75, acid:45, bitter:20, vitC:4, cal:67, water:81,
-      season:"Aug–Oct", tags:["Grape jelly","Juice","Wild-origin","Slip-skin"] },
-    { name:"Pawpaw", emoji:"🥑", color:"#5a7a1e",
-      desc:"North America's forgotten tropical fruit: a custard-textured, mango-banana-papaya wonder that hides in forest understories.",
-      fact:"<b>🦁 Forgotten giant:</b> Pawpaw is the largest edible fruit native to the US, yet almost nobody's heard of it. George Washington loved them chilled.",
-      sweet:75, acid:15, bitter:10, vitC:18, cal:80, water:75,
-      season:"Aug–Oct", tags:["Custard","Native","Rare","Tropical-flavor"] },
-    { name:"Meyer Lemon", emoji:"🍋", color:"#f4c430",
-      desc:"A hybrid between a lemon and mandarin, sweeter and more floral than regular lemons, prized by chefs.",
-      fact:"<b>🏡 California darling:</b> Frank N. Meyer brought them from China in 1908. They became the backyard tree obsession of California.",
-      sweet:50, acid:70, bitter:20, vitC:53, cal:29, water:87,
-      season:"Nov–Mar", tags:["Hybrid","Floral","Chef's choice","California"] },
+  840:{ name:"United States",flag:"🇺🇸", fruits:[
+    {name:"Blueberry",emoji:"🫐",bg:"#3a5fa0",sweet:70,acid:35,bitter:10,vitC:14,fun:"🦅 Blueberries are one of the only fruits TRULY native to North America! Indigenous peoples dried them for winter survival for thousands of years.",desc:"Plump indigo berries that are native to North America. Packed with antioxidants and perfect in pancakes, muffins, or just by the handful!",season:"Jun–Aug",tags:["Native","Antioxidant","Summer","Superfood"]},
+    {name:"Cranberry",emoji:"❤️",bg:"#c0392b",sweet:15,acid:90,bitter:40,vitC:14,fun:"🏀 Ripe cranberries BOUNCE like little rubber balls! Farmers have used the 'bounce board test' to sort good cranberries since the 1880s!",desc:"Tart, fire-engine red berries that grow in bogs. Super sour alone but amazing as juice or sauce — a Thanksgiving must-have!",season:"Sep–Nov",tags:["Tart","Bouncy!","Bog fruit","Thanksgiving"]},
+    {name:"Pawpaw",emoji:"🥑",bg:"#5a7a1e",sweet:75,acid:15,bitter:10,vitC:18,fun:"👑 Pawpaw is the LARGEST edible fruit native to the US! George Washington loved to eat them chilled. Yet almost no one knows it exists!",desc:"North America's forgotten tropical fruit! Creamy custard texture with a taste like mango + banana + papaya. Grows wild in forests!",season:"Aug–Oct",tags:["Hidden gem","Custard texture","Tropical flavour","Native"]},
+    {name:"Concord Grape",emoji:"🍇",bg:"#4a235a",sweet:75,acid:45,bitter:20,vitC:4,fun:"🍬 Concord grapes have 'slip skins' — the purple skin pops right off to reveal green flesh inside! This unusual flavour inspired all artificial grape candy.",desc:"The dark, musky grape that inspired grape juice and purple jelly. Grown in the Finger Lakes region of New York since 1849!",season:"Aug–Oct",tags:["Grape jelly","Purple juice","PB&J hero","Slip-skin"]},
+    {name:"Huckleberry",emoji:"🫐",bg:"#5a3070",sweet:60,acid:50,bitter:20,vitC:10,fun:"🐻 Bears go absolutely WILD for huckleberries! In Idaho and Montana, bears will travel huge distances just to find a huckleberry patch.",desc:"Wild mountain berries related to blueberries but with a bolder, more complex flavour. Beloved in the Rocky Mountain states!",season:"Jul–Sep",tags:["Wild","Mountain berry","Bear favourite","Pacific Northwest"]},
+    {name:"Meyer Lemon",emoji:"🍋",bg:"#f4c430",sweet:50,acid:70,bitter:20,vitC:53,fun:"🏡 Frank N. Meyer brought Meyer lemons from China to the USA in 1908. They became the ultimate California backyard tree obsession!",desc:"A sweeter, more floral lemon that's a hybrid of a regular lemon and a mandarin orange. Chefs absolutely love these!",season:"Nov–Mar",tags:["Hybrid","Floral","Chef's pick","California"]},
   ]},
-  484: { name:"Mexico", flag:"🇲🇽", fruits:[
-    { name:"Avocado", emoji:"🥑", color:"#2d5a1b",
-      desc:"The buttery, fat-rich fruit the Aztecs called 'ahuacatl' (also meaning testicle, for its shape).",
-      fact:"<b>🦕 Ancient tree:</b> Avocados evolved for megafauna that are now extinct — giant ground sloths! Without them as seed dispersers, avocados would likely have disappeared.",
-      sweet:15, acid:10, bitter:15, vitC:10, cal:160, water:73,
-      season:"Year-round", tags:["Fat-rich","Aztec","Climacteric","Superfood"] },
-    { name:"Mamey Sapote", emoji:"🟤", color:"#c04a22",
-      desc:"A football-shaped fruit with salmon-orange flesh tasting like a blend of sweet potato, pumpkin pie, and almond.",
-      fact:"<b>🎃 Pumpkin pie fruit:</b> Mamey is so rich and dessert-like, it's blended into ice cream, milkshakes, and smoothies throughout Central America and South Florida.",
-      sweet:85, acid:15, bitter:8, vitC:24, cal:124, water:65,
-      season:"Mar–Sep", tags:["Creamy","Dessert","Mayan","Salmon-flesh"] },
-    { name:"Pitaya", emoji:"🐉", color:"#e91e8c",
-      desc:"Dragon fruit — the spiky, neon-pink cactus fruit with a mild, kiwi-like interior dotted with tiny seeds.",
-      fact:"<b>🌵 Cactus bloom:</b> Dragon fruit flowers bloom for only ONE NIGHT. They must be pollinated by bats or moths in that single night or no fruit forms.",
-      sweet:55, acid:20, bitter:5, vitC:9, cal:60, water:87,
-      season:"Jun–Nov", tags:["Cactus","Visual","Mild","Instagram icon"] },
-    { name:"Guava", emoji:"🍏", color:"#4da64d",
-      desc:"A tropical gem with pink or white aromatic flesh, 4× more vitamin C than an orange.",
-      fact:"<b>💊 Vitamin C king:</b> One guava contains 228mg of vitamin C — about 4× more than a whole orange. Sneezing season? Grab a guava.",
-      sweet:65, acid:40, bitter:15, vitC:228, cal:68, water:81,
-      season:"Aug–Nov", tags:["Vitamin C","Aromatic","Pink flesh","Tropical"] },
-    { name:"Chico Zapote", emoji:"🟫", color:"#8b4513",
-      desc:"The source of chicle — the original natural chewing gum. A caramel-brown fruit tasting of pear and brown sugar.",
-      fact:"<b>🍬 Original chewing gum:</b> The sapodilla tree's latex (chicle) was used by the Aztecs and later by Wrigley's to make the first modern chewing gum.",
-      sweet:80, acid:10, bitter:8, vitC:15, cal:83, water:78,
-      season:"Oct–Mar", tags:["Chicle","Caramel","Mesoamerican","Gum tree"] },
+  484:{ name:"Mexico",flag:"🇲🇽", fruits:[
+    {name:"Avocado",emoji:"🥑",bg:"#2d5a1b",sweet:15,acid:10,bitter:15,vitC:10,fun:"🦕 Avocados evolved for GIANT GROUND SLOTHS that are now extinct! Without those ancient animals to eat and disperse the seeds, avocados would have disappeared!",desc:"The buttery, fat-rich fruit the Aztecs called 'ahuacatl.' Technically a giant berry with a single seed! 80% of the world's avocados come from Mexico.",season:"Year-round",tags:["Aztec","Giant berry","Fat-rich","Guacamole star"]},
+    {name:"Mamey Sapote",emoji:"🟤",bg:"#c04a22",sweet:85,acid:15,bitter:8,vitC:24,fun:"🎃 Mamey tastes SO much like pumpkin pie and sweet potato that people make it into ice cream and milkshakes! It's basically dessert growing on a tree.",desc:"A football-shaped fruit with gorgeous salmon-orange flesh tasting like pumpkin pie mixed with almond and honey. So sweet!",season:"Mar–Sep",tags:["Creamy","Dessert fruit","Mayan","Salmon flesh"]},
+    {name:"Dragon Fruit",emoji:"🐉",bg:"#e91e8c",sweet:55,acid:20,bitter:5,vitC:9,fun:"🌵 Dragon fruit flowers bloom for ONLY ONE NIGHT and must be pollinated by bats or moths in that single night — or no fruit forms!",desc:"The spiky neon-pink cactus fruit! Inside is a mild, refreshing white flesh spotted with tiny black seeds. Stunning to look at!",season:"Jun–Nov",tags:["Cactus fruit","Night bloomer","Instagram icon","Visual wow"]},
+    {name:"Tuna (Prickly Pear)",emoji:"🟣",bg:"#9b3090",sweet:70,acid:30,bitter:10,vitC:14,fun:"🌵 Prickly pear 'tunas' were a life-saving food for desert peoples! The intense purple-red colour was even used as a dye for clothing and art!",desc:"The juicy fruit of cacti! Comes in red, purple, yellow and green. Sweet with a hint of watermelon — a favourite Mexican street food!",season:"Aug–Nov",tags:["Cactus","Desert food","Purple dye","Street snack"]},
+    {name:"Guava",emoji:"🍏",bg:"#4da64d",sweet:65,acid:40,bitter:15,vitC:228,fun:"💊 One guava has 4× more vitamin C than a whole orange! If you feel a cold coming, grab a guava!",desc:"A tropical gem with pink or white fragrant flesh. Super high in vitamin C — one of the healthiest fruits you can eat!",season:"Aug–Nov",tags:["Vitamin C queen","Aromatic","Pink flesh","Tropical"]},
+    {name:"Tejocote",emoji:"🍑",bg:"#c87020",sweet:45,acid:55,bitter:25,vitC:30,fun:"🎄 Tejocote is THE fruit of Mexican Christmas! It's strung into necklaces for the posadas festival and eaten as a traditional holiday treat.",desc:"A small orange-yellow fruit related to hawthorn — tart and firm. The official fruit of Mexican Christmas celebrations!",season:"Nov–Jan",tags:["Christmas fruit","Hawthorn relative","Posadas","Festival food"]},
   ]},
-  356: { name:"India", flag:"🇮🇳", fruits:[
-    { name:"Alphonso Mango", emoji:"🥭", color:"#f4a200",
-      desc:"The 'King of Mangoes' — a saffron-yellow variety from Ratnagiri with zero fiber, pure silk texture.",
-      fact:"<b>👑 The King:</b> Alphonso mangoes are named after Afonso de Albuquerque, a Portuguese general. They're so prized that counterfeit Alphonsos are a real market problem in India!",
-      sweet:92, acid:25, bitter:5, vitC:36, cal:60, water:82,
-      season:"Apr–Jun", tags:["King of mangoes","Fiber-free","Ratnagiri","GI tag"] },
-    { name:"Jackfruit", emoji:"🟡", color:"#d4a017",
-      desc:"The world's largest tree fruit — up to 35kg — with a meaty texture making it popular as a vegan meat substitute.",
-      fact:"<b>🌳 Biggest fruit:</b> The jackfruit is the largest tree-borne fruit on Earth. One jackfruit can feed an entire family. Unripe, it shreds like pulled pork!",
-      sweet:70, acid:20, bitter:10, vitC:14, cal:95, water:73,
-      season:"Mar–Jun", tags:["Largest fruit","Vegan meat","National fruit of Bangladesh","Tropical"] },
-    { name:"Jamun", emoji:"🟣", color:"#4b0082",
-      desc:"Indian blackberry — tiny purple-black berries that stain your tongue purple and have a unique salt-sweet-astringent taste.",
-      fact:"<b>💜 Tongue-stainer:</b> Jamun turns your tongue and lips purple for hours. Kids in India consider it a badge of honor. It also has remarkable blood sugar-lowering properties.",
-      sweet:50, acid:35, bitter:45, vitC:14, cal:62, water:83,
-      season:"Jun–Jul", tags:["Diabetic-friendly","Astringent","Tongue-staining","Monsoon fruit"] },
-    { name:"Tamarind", emoji:"🤎", color:"#8b6914",
-      desc:"A sticky brown pulp inside a brittle pod — the sweet-sour flavor base of Worcestershire sauce, pad thai, and Indian chutneys.",
-      fact:"<b>🌍 Global flavor:</b> Tamarind traveled from Africa to India, then conquered Asia and Latin America. It's in Worcestershire sauce, HP sauce, and pad thai.",
-      sweet:40, acid:85, bitter:20, vitC:4, cal:239, water:31,
-      season:"Dec–Apr", tags:["Sour","Culinary base","Worcestershire","Ancient spice route"] },
-    { name:"Bael", emoji:"🍊", color:"#c8861a",
-      desc:"A sacred fruit in Hinduism, offered to Lord Shiva. Thick woody rind hiding aromatic golden pulp used medicinally for centuries.",
-      fact:"<b>🕉️ Sacred fruit:</b> Bael leaves are integral to Hindu worship of Shiva. The fruit has been used in Ayurvedic medicine for 5,000+ years.",
-      sweet:50, acid:20, bitter:35, vitC:9, cal:140, water:61,
-      season:"Mar–May", tags:["Sacred","Ayurvedic","Woody rind","Digestive"] },
+  356:{ name:"India",flag:"🇮🇳", fruits:[
+    {name:"Alphonso Mango",emoji:"🥭",bg:"#f4a200",sweet:92,acid:25,bitter:5,vitC:36,fun:"👑 Alphonso mangoes are SO prized that counterfeit Alphonsos are a real crime problem in India! People get cheated buying fake ones every mango season.",desc:"The 'King of Mangoes' — a silky-smooth, saffron-yellow variety from Ratnagiri with no stringy bits at all. Pure mango paradise!",season:"Apr–Jun",tags:["King of mangoes","Fiber-free silk","GI tag","Royal fruit"]},
+    {name:"Jackfruit",emoji:"🟡",bg:"#d4a017",sweet:70,acid:20,bitter:10,vitC:14,fun:"🌳 One jackfruit can weigh up to 35 kilograms — it's the LARGEST tree fruit on Earth! And when unripe, it shreds just like pulled pork!",desc:"The world's largest tree fruit! Has a meaty texture when unripe — that's why it's used as a vegan meat substitute worldwide. Can feed a whole family!",season:"Mar–Jun",tags:["World's largest tree fruit","Vegan meat","National fruit of Bangladesh","Tropical"]},
+    {name:"Jamun",emoji:"🟣",bg:"#4b0082",sweet:50,acid:35,bitter:45,vitC:14,fun:"💜 Eating jamun turns your tongue and lips deep purple for HOURS! Indian kids compete to see who has the most stained tongue. It's a badge of honour!",desc:"Tiny purple-black Indian blackberries that stain your tongue purple! Has a unique sweet-sour-salty flavour unlike anything else. Monsoon season special!",season:"Jun–Jul",tags:["Tongue-stainer","Diabetic-friendly","Monsoon fruit","Astringent"]},
+    {name:"Tamarind",emoji:"🤎",bg:"#8b6914",sweet:40,acid:85,bitter:20,vitC:4,fun:"🌍 Tamarind is in Worcestershire sauce, pad thai, HP sauce, AND Indian chutneys! It quietly conquered the entire world's cuisine.",desc:"Sticky brown pulp inside a brittle pod — the super sour-sweet base of so many sauces across Asia, Africa and Latin America!",season:"Dec–Apr",tags:["Sour sensation","Worcestershire secret","Pad thai star","Ancient spice route"]},
+    {name:"Amla",emoji:"🟢",bg:"#3a8a3a",sweet:20,acid:88,bitter:50,vitC:600,fun:"💊 Amla has 600mg of vitamin C per fruit — that's 10× more than an orange! In Ayurvedic medicine it's been called the 'divine fruit' for 5,000 years.",desc:"The Indian gooseberry! Incredibly sour with layers of sweet and bitter. Has more vitamin C than almost any fruit. Used in Ayurvedic medicine forever!",season:"Oct–Mar",tags:["Vitamin C bomb","Ayurvedic","Divine fruit","5000yr history"]},
+    {name:"Chikoo (Sapodilla)",emoji:"🟫",bg:"#9a6020",sweet:80,acid:10,bitter:8,vitC:15,fun:"🍬 The sapodilla tree produces chicle — the original ingredient in chewing gum! Wrigley used it to make the first commercial chewing gum!",desc:"A caramel-brown fruit that tastes like brown sugar, pear and a hint of vanilla. The tree's sap (chicle) was the original chewing gum!",season:"Oct–Mar",tags:["OG chewing gum","Caramel flavour","Mesoamerican","Brown sugar taste"]},
   ]},
-  764: { name:"Thailand", flag:"🇹🇭", fruits:[
-    { name:"Durian", emoji:"🟡", color:"#e8c84a",
-      desc:"The notorious 'King of Fruits' — creamy, custardy, rich flesh with an infamous aroma that's banned in hotels and public transit.",
-      fact:"<b>🚫 Hotel ban:</b> Durian is banned in many hotels, airports, and subway systems across Southeast Asia. The smell is described as gym socks meets onions meets heaven — all at once.",
-      sweet:75, acid:10, bitter:15, vitC:20, cal:147, water:65,
-      season:"Apr–Aug", tags:["King of fruits","Banned in hotels","Pungent","Custardy"] },
-    { name:"Mangosteen", emoji:"💜", color:"#6b2d8b",
-      desc:"Called the 'Queen of Fruits' — a perfectly round purple fruit hiding snow-white, floral, perfectly balanced segments.",
-      fact:"<b>👑 Queen of fruits:</b> Queen Victoria reportedly offered a reward to anyone who could bring her a fresh mangosteen. The thick hull is used in traditional medicine.",
-      sweet:75, acid:40, bitter:20, vitC:3, cal:73, water:81,
-      season:"Apr–Sep", tags:["Queen of fruits","Xanthones","Floral","Royal"] },
-    { name:"Rambutan", emoji:"🔴", color:"#c0392b",
-      desc:"A hairy, alien-looking red fruit hiding a lychee-like translucent pearl inside. The name means 'hairy' in Malay.",
-      fact:"<b>👽 Hairy alien:</b> 'Rambutan' literally means 'hairy' in Malay. The soft spines are called spinterns and they're completely harmless — just gloriously weird.",
-      sweet:72, acid:25, bitter:8, vitC:66, cal:82, water:78,
-      season:"May–Sep", tags:["Hairy","Lychee relative","Sweet","Alien-looking"] },
-    { name:"Dragon Fruit", emoji:"🐉", color:"#ff69b4",
-      desc:"The iconic fuchsia cactus fruit — mild, hydrating, speckled with tiny black seeds throughout its white or red flesh.",
-      fact:"<b>🌙 Night bloomer:</b> Dragon fruit flowers open for only one night, releasing a sweet scent to attract bats and moths for pollination.",
-      sweet:50, acid:20, bitter:5, vitC:9, cal:60, water:87,
-      season:"Jun–Nov", tags:["Cactus","Hydrating","Visual icon","Night-blooming"] },
-    { name:"Longan", emoji:"🟡", color:"#c8a84b",
-      desc:"Tiny translucent spheres nicknamed 'Dragon Eye' — sweet, floral, juicy little gems related to lychee.",
-      fact:"<b>👁️ Dragon's eye:</b> The longan's dark seed visible through translucent flesh looks exactly like an eyeball — hence the name 'dragon eye' in Chinese (龙眼, lóng yǎn).",
-      sweet:78, acid:18, bitter:5, vitC:84, cal:60, water:83,
-      season:"Jul–Aug", tags:["Dragon eye","Floral","Translucent","Chi-building"] },
+  764:{ name:"Thailand",flag:"🇹🇭", fruits:[
+    {name:"Durian",emoji:"🟡",bg:"#c8a820",sweet:75,acid:10,bitter:15,vitC:20,fun:"🚫 Durian is BANNED in many hotels, airports and subway systems across Asia! The smell has been described as gym socks + onions + heaven all at once!",desc:"The notorious 'King of Fruits' with creamy custard flesh — loved by millions and strongly smelled by everyone! Hotels actually ban it!",season:"Apr–Aug",tags:["King of fruits","Hotel banned","Custardy","Love it or hate it"]},
+    {name:"Mangosteen",emoji:"💜",bg:"#6b2d8b",sweet:75,acid:40,bitter:20,vitC:3,fun:"👑 Queen Victoria reportedly offered a REWARD to anyone who could bring her a fresh mangosteen! She was obsessed with tasting one.",desc:"Called the 'Queen of Fruits'! A purple ball hiding snow-white segments inside. Tastes floral, sweet and perfectly balanced. The best fruit ever say many!",season:"Apr–Sep",tags:["Queen of fruits","Floral","Purple beauty","Royal obsession"]},
+    {name:"Rambutan",emoji:"🔴",bg:"#c0392b",sweet:72,acid:25,bitter:8,vitC:66,fun:"👽 'Rambutan' literally means 'hairy' in Malay! The soft red spines are totally harmless — just nature being wonderfully, gloriously weird.",desc:"A hairy, alien-looking red fruit hiding a lychee-like translucent pearl inside. So fun to peel! The name literally means 'hairy' in Malay!",season:"May–Sep",tags:["Hairy and proud","Lychee cousin","Sweet","Alien vibes"]},
+    {name:"Rose Apple",emoji:"🌸",bg:"#f08098",sweet:55,acid:15,bitter:5,vitC:22,fun:"🌹 Rose apples are crunchy like an apple but smell and taste like ROSES! They're used in perfume-making as well as eaten fresh.",desc:"A bell-shaped fruit that's crunchy like an apple but smells and tastes like fresh roses! Light pink or white, super refreshing and unique.",season:"Mar–Jun",tags:["Rose scented","Crunchy","Bell-shaped","Unique fragrance"]},
+    {name:"Longan",emoji:"🟡",bg:"#c8a84b",sweet:78,acid:18,bitter:5,vitC:84,fun:"👁️ Longan means 'Dragon's Eye' in Chinese (龙眼)! The dark seed visible through the translucent flesh looks exactly like an eyeball staring at you!",desc:"Tiny translucent spheres nicknamed 'Dragon Eye'! Super sweet, floral and juicy. Related to lychee but with a more honey-like taste.",season:"Jul–Aug",tags:["Dragon eye","Honey sweet","Translucent","Chi-building"]},
+    {name:"Sala (Snake Fruit)",emoji:"🐍",bg:"#8b4513",sweet:60,acid:55,bitter:20,vitC:9,fun:"🐍 Sala's scaly brown skin genuinely looks like snakeskin up close! The flavour is complex — sweet, sour and slightly vinegary at the same time.",desc:"Scaly brown skin that really does look like snake scales! Inside is crispy, sweet-acidic flesh unlike anything else. A totally unique fruit!",season:"Year-round",tags:["Snake skin look","Crispy","Unique flavour","Fascinating"]},
   ]},
-  392: { name:"Japan", flag:"🇯🇵", fruits:[
-    { name:"Yuzu", emoji:"🍋", color:"#f5d040",
-      desc:"A small, knobbly citrus revered for its aromatic zest — more perfumed than lemon, with hints of grapefruit and mandarin.",
-      fact:"<b>♨️ Winter solstice bath:</b> On Tōji (winter solstice), Japanese people take yuzu baths — floating whole fruits in hot water. The oils are believed to ward off colds.",
-      sweet:30, acid:75, bitter:35, vitC:150, cal:53, water:85,
-      season:"Nov–Jan", tags:["Aromatic zest","Onsen fruit","Prized","Cold-weather"] },
-    { name:"Fuji Apple", emoji:"🍎", color:"#e8574a",
-      desc:"Japan's crown jewel apple — named after Mount Fuji, famed for extraordinary sweetness, dense crunch, and record-breaking prices.",
-      fact:"<b>💰 Million-yen apples:</b> Premium Fuji apples in Japan are individually wrapped, grown with sun-reflective sheets, and sometimes sell for $30+ each as luxury gifts.",
-      sweet:88, acid:20, bitter:5, vitC:5, cal:52, water:86,
-      season:"Oct–Feb", tags:["Premium","Luxury gift","Dense","World's sweetest?"] },
-    { name:"Persimmon", emoji:"🟠", color:"#e07020",
-      desc:"Amber-orange autumn gems — the astringent hachiya variety must be fully ripe or it'll make your mouth go completely dry.",
-      fact:"<b>🍂 Tannin trap:</b> Unripe persimmons contain soluble tannins that bind to saliva proteins, creating a bizarre chalky, mouth-puckering sensation that lasts for hours.",
-      sweet:65, acid:15, bitter:30, vitC:7, cal:81, water:80,
-      season:"Oct–Dec", tags:["Autumn","Tannin","Astringent","Dried tradition"] },
-    { name:"Mikan", emoji:"🍊", color:"#f47820",
-      desc:"Japan's beloved winter mandarin — loose-skinned, super easy to peel, sweet, and ubiquitous under kotatsu tables in December.",
-      fact:"<b>🛋️ Kotatsu ritual:</b> Eating mikan under a kotatsu (heated blanket table) while watching TV is a quintessential Japanese winter ritual. They're sold in wooden crates as gifts.",
-      sweet:75, acid:30, bitter:10, vitC:35, cal:51, water:87,
-      season:"Nov–Feb", tags:["Winter classic","Easy-peel","Kotatsu","Gift fruit"] },
-    { name:"Shine Muscat", emoji:"🍇", color:"#c8e850",
-      desc:"Japan's luxury green grape — seedless, enormous, crunchily thin-skinned, each cluster individually tended to reach perfection.",
-      fact:"<b>✂️ Thinning art:</b> Farmers meticulously snip individual grapes from each cluster to allow remaining grapes to grow bigger, sweeter, and perfectly round. Pure art.",
-      sweet:92, acid:18, bitter:5, vitC:3, cal:67, water:82,
-      season:"Aug–Oct", tags:["Luxury","Seedless","Thin-skin","Gift culture"] },
+  392:{ name:"Japan",flag:"🇯🇵", fruits:[
+    {name:"Yuzu",emoji:"🍋",bg:"#f5d040",sweet:30,acid:75,bitter:35,vitC:150,fun:"♨️ On the Japanese winter solstice (Tōji), people take BATHS with whole yuzu floating in hot water! The oils are believed to protect from colds.",desc:"A knobbly citrus prized more for its incredible fragrant zest than its juice. Smells like lemon + grapefruit + flowers all at once!",season:"Nov–Jan",tags:["Aromatic zest","Onsen fruit","Winter solstice","Prized"]},
+    {name:"Fuji Apple",emoji:"🍎",bg:"#e8574a",sweet:88,acid:20,bitter:5,vitC:5,fun:"💰 Premium Fuji apples in Japan are individually wrapped, grown with reflective sheets for even colour, and can sell for $30+ EACH as luxury gifts!",desc:"Japan's crown jewel apple — named after Mount Fuji! Extraordinarily sweet, dense and crunchy. Sometimes sold as luxury gifts worth thousands!",season:"Oct–Feb",tags:["Premium","Luxury gift","World's sweetest?","Dense crunch"]},
+    {name:"Mikan",emoji:"🍊",bg:"#f47820",sweet:75,acid:30,bitter:10,vitC:35,fun:"🛋️ Eating mikan under a kotatsu (heated blanket table) while watching TV is the ULTIMATE Japanese winter tradition. Sold in wooden gift crates!",desc:"Japan's beloved easy-peel mandarin! A winter staple eaten snuggled under a warm kotatsu blanket. Sweet, easy to peel, totally addictive!",season:"Nov–Feb",tags:["Winter classic","Super easy peel","Kotatsu snack","Gift fruit"]},
+    {name:"Persimmon",emoji:"🟠",bg:"#e07020",sweet:65,acid:15,bitter:30,vitC:7,fun:"🍂 Unripe persimmons contain TANNINS that bind to your saliva and create a horrible chalky-dry mouth sensation that lasts for hours. Only eat when fully ripe!",season:"Oct–Dec",desc:"Gorgeous amber-orange autumn gems! Dried into a traditional sweet called 'hoshigaki' that takes weeks to make. Must be fully ripe or your mouth goes completely dry!",tags:["Autumn jewel","Tannin trap","Dried tradition","Hoshigaki art"]},
+    {name:"Shine Muscat",emoji:"🍇",bg:"#c8e850",sweet:92,acid:18,bitter:5,vitC:3,fun:"✂️ Farmers hand-snip individual grapes from each cluster to let the rest grow bigger and sweeter! Each perfect grape cluster is a total work of art.",desc:"Japan's luxury green grape! Seedless, enormous, thin-skinned and explosively sweet. Premium clusters sell as expensive gifts in beautiful boxes.",season:"Aug–Oct",tags:["Luxury grape","Seedless","Paper-thin skin","Gift culture"]},
+    {name:"Ume (Japanese Plum)",emoji:"🌸",bg:"#e870a0",sweet:15,acid:92,bitter:30,vitC:6,fun:"🏯 Ume was planted around Japanese castles during the feudal era — soldiers could eat it for energy and the sour taste kept them alert during battles!",desc:"An intensely sour plum pickled into 'umeboshi' — the bright red salty-sour balls in Japanese lunch boxes! The most iconic sour food in Japan.",season:"Jun–Jul",tags:["Umeboshi","Sour power","Castle history","Samurai snack"]},
   ]},
-  380: { name:"Italy", flag:"🇮🇹", fruits:[
-    { name:"Blood Orange", emoji:"🩸", color:"#c0392b",
-      desc:"Sicilian red-fleshed oranges — the deep crimson colour comes from anthocyanins, giving them a berry-like complexity.",
-      fact:"<b>🌡️ Cold nights = red flesh:</b> The blood red colour only develops when the fruit experiences cold nights during ripening. Sicily's unique climate makes them irreplaceable.",
-      sweet:65, acid:55, bitter:20, vitC:60, cal:50, water:87,
-      season:"Dec–Mar", tags:["Anthocyanin","Sicilian","Berry-orange fusion","DOP"] },
-    { name:"Bergamot", emoji:"🍋", color:"#b8d020",
-      desc:"A bitter, fragrant citrus used almost exclusively for its rind oil — the soul of Earl Grey tea and Calabrian perfumery.",
-      fact:"<b>☕ Earl Grey secret:</b> Bergamot oil is what gives Earl Grey tea its distinctive floral-citrus aroma. Almost all bergamot in the world comes from a tiny strip of Calabria.",
-      sweet:20, acid:70, bitter:60, vitC:45, cal:36, water:88,
-      season:"Nov–Feb", tags:["Earl Grey","Perfume","Calabrian","Rind-only use"] },
-    { name:"Fig", emoji:"🍑", color:"#8b4c8a",
-      desc:"Technically not a fruit — a fig is a syconium, an inverted flower cluster. Ancient symbol of fertility and wisdom.",
-      fact:"<b>🐝 Inside-out flower:</b> A fig is actually hundreds of tiny flowers blooming inside a pouch. The wasp that pollinates them crawls inside and dies there. You've eaten it.",
-      sweet:75, acid:20, bitter:15, vitC:2, cal:74, water:79,
-      season:"Jul–Oct", tags:["Ancient","Inverted flower","Wasp-pollinated","Mediterranean"] },
-    { name:"Cedro", emoji:"🍋", color:"#e8e840",
-      desc:"The enormous, knobbly citron — almost entirely rind, used for candied peel in panettone and limoncello variants.",
-      fact:"<b>🏺 Oldest citrus:</b> Cedro (citron) is one of the original three ancestor citrus fruits from which all other citrus species descended. It arrived in Italy with the Romans.",
-      sweet:20, acid:65, bitter:40, vitC:120, cal:36, water:88,
-      season:"Oct–Jan", tags:["Ancient citrus","Thick rind","Panettone","Ancestor fruit"] },
+  380:{ name:"Italy",flag:"🇮🇹", fruits:[
+    {name:"Blood Orange",emoji:"🩸",bg:"#c0392b",sweet:65,acid:55,bitter:20,vitC:60,fun:"🌡️ The red colour in blood oranges ONLY develops when the fruit experiences cold nights! Sicily's unique hot days + cold nights makes them uniquely stunning.",desc:"Sicilian red-fleshed oranges with a taste of orange + berry! The gorgeous crimson colour comes from anthocyanins. Winter's most dramatic fruit!",season:"Dec–Mar",tags:["Anthocyanin","Sicilian special","Berry-orange","DOP protected"]},
+    {name:"Bergamot",emoji:"🍋",bg:"#b8d020",sweet:20,acid:70,bitter:60,vitC:45,fun:"☕ Bergamot oil is what gives Earl Grey tea its distinctive floral scent! Almost ALL the world's bergamot comes from a tiny 35km strip of Calabria.",desc:"A bitter, incredibly fragrant citrus almost never eaten fresh — only used for its amazing rind oil! The soul of Earl Grey tea and fine perfumes.",season:"Nov–Feb",tags:["Earl Grey secret","Perfume ingredient","Calabria only","Rind oil"]},
+    {name:"Fig",emoji:"🍑",bg:"#8b4c8a",sweet:75,acid:20,bitter:15,vitC:2,fun:"🐝 A fig isn't actually a fruit — it's hundreds of tiny flowers blooming INSIDE a pouch! The fig wasp crawls in, pollinates them, and dies inside. You've eaten it!",desc:"Technically an inside-out flower arrangement! Honey-sweet with a jammy texture. One of humanity's oldest cultivated foods — eaten for 11,000+ years!",season:"Jul–Oct",tags:["Ancient food","Inverted flower","Wasp-pollinated","Mediterranean icon"]},
+    {name:"Amalfi Lemon",emoji:"🟡",bg:"#f4d820",sweet:40,acid:72,bitter:25,vitC:77,fun:"🍹 Amalfi lemons are so large and sweet that locals eat them sliced with just a pinch of salt — like a fruit! Regular lemons would be way too sour for this.",desc:"The gigantic, sweet lemons of the Amalfi Coast! Much sweeter than regular lemons. Locals eat them sliced with salt. The source of authentic limoncello!",season:"Feb–Oct",tags:["Giant lemon","Sweet enough to eat","Limoncello king","UNESCO coast"]},
+    {name:"Moscato Grape",emoji:"🍇",bg:"#c8a0d8",sweet:88,acid:20,bitter:8,vitC:4,fun:"🎵 Moscato grapes are SO aromatic that they're described as 'the grape that smells like perfume.' They've been grown in Italy for over 2,000 years!",desc:"The most fragrant grape in the world! Sweet, musky and floral — used to make Moscato wine but also delicious fresh. Italy's 2,000-year-old treasure.",season:"Aug–Sep",tags:["Most fragrant grape","Ancient variety","Moscato wine","Perfume-like"]},
   ]},
-  156: { name:"China", flag:"🇨🇳", fruits:[
-    { name:"Lychee", emoji:"🔴", color:"#e8384a",
-      desc:"Translucent, floral white flesh under a rough pink shell — the most-celebrated fruit of ancient Chinese emperors.",
-      fact:"<b>👸 Imperial obsession:</b> Emperor Xuanzong had fresh lychees galloped by horse relay from Guangdong to Chang'an (2,000km!) just for Yang Guifei's pleasure.",
-      sweet:82, acid:25, bitter:5, vitC:72, cal:66, water:82,
-      season:"May–Jul", tags:["Imperial","Floral","Translucent","2000yr history"] },
-    { name:"Kumquat", emoji:"🟠", color:"#f47820",
-      desc:"Bite-size citrus where the sweet is in the skin and the sour is in the flesh — the exact opposite of every other citrus.",
-      fact:"<b>🔄 Reversed citrus:</b> Kumquat is the only citrus you eat whole, peel and all. The peel is sweet and the flesh is sour — a complete reversal of orange logic.",
-      sweet:55, acid:65, bitter:30, vitC:44, cal:71, water:80,
-      season:"Nov–Mar", tags:["Eat whole","Reversed sweet/sour","Lucky New Year","Miniature"] },
-    { name:"Dragon Fruit (White)", emoji:"🤍", color:"#f0a0c0",
-      desc:"A milder cousin of the red variety — white flesh, speckled with tiny seeds, delicately sweet, and strikingly beautiful.",
-      fact:"<b>🌵 Cactus relative:</b> Dragon fruit is a cactus fruit. The same plant can live over 20 years and produce fruit for that entire period in the right conditions.",
-      sweet:52, acid:18, bitter:5, vitC:9, cal:60, water:87,
-      season:"Jun–Nov", tags:["Cactus","Mild","Visual","Hydrating"] },
-    { name:"Pomelo", emoji:"🍈", color:"#d4c840",
-      desc:"The grandfather of grapefruit — the largest citrus fruit, with a thick spongy rind and bittersweet, refreshing flesh.",
-      fact:"<b>👴 Grapefruit's grandad:</b> The grapefruit is a hybrid of pomelo and sweet orange. Pomelo is one of only three original citrus ancestors from which all modern citrus evolved.",
-      sweet:60, acid:35, bitter:25, vitC:61, cal:38, water:89,
-      season:"Nov–Mar", tags:["Giant citrus","Ancestor","New Year gift","Spongy rind"] },
-    { name:"White Mulberry", emoji:"⚪", color:"#c8a0c8",
-      desc:"The pale, sweet berry famously linked to silkworms — mulberry leaves fed the larvae that built China's silk empire.",
-      fact:"<b>🐛 Silk secret:</b> For thousands of years, China kept the silkworm-mulberry relationship a national secret punishable by death. The penalty for smuggling silkworm eggs was execution.",
-      sweet:70, acid:25, bitter:15, vitC:36, cal:43, water:88,
-      season:"May–Jun", tags:["Silk road","Ancient","Silkworm host","Imperial secret"] },
+  156:{ name:"China",flag:"🇨🇳", fruits:[
+    {name:"Lychee",emoji:"🔴",bg:"#e8384a",sweet:82,acid:25,bitter:5,vitC:72,fun:"👸 Emperor Xuanzong had fresh lychees galloped by horse relay for 2,000km from Guangdong to Chang'an JUST for his beloved Yang Guifei's pleasure!",desc:"Translucent, floral white flesh hiding under a rough pink shell. China's most celebrated fruit — emperors went wild for it!",season:"May–Jul",tags:["Imperial obsession","Floral","Translucent gem","2000yr history"]},
+    {name:"Kumquat",emoji:"🟠",bg:"#f47820",sweet:55,acid:65,bitter:30,vitC:44,fun:"🔄 Kumquat is the ONLY citrus you eat whole — peel and all! But here's the twist: the peel is sweet and the flesh is sour — the complete opposite of an orange!",desc:"Bite-sized citrus where the sweet part is the SKIN and the sour part is the flesh — totally backwards from every other citrus! Eaten whole in one bite!",season:"Nov–Mar",tags:["Eat whole","Reversed flavour","Lucky New Year","Miniature citrus"]},
+    {name:"Pomelo",emoji:"🍈",bg:"#d4c840",sweet:60,acid:35,bitter:25,vitC:61,fun:"👴 The grapefruit is a hybrid between a pomelo and a sweet orange! Pomelo is literally the grandfather of grapefruit — and it's one of only three original citrus ancestors!",desc:"The BIGGEST citrus fruit — grandparent of grapefruit! A massive spongy rind hiding bittersweet, refreshing flesh inside. A Chinese New Year gift tradition!",season:"Nov–Mar",tags:["Grandfather of grapefruit","Giant citrus","New Year gift","Ancestor fruit"]},
+    {name:"Longan",emoji:"🫧",bg:"#d4b060",sweet:80,acid:15,bitter:4,vitC:84,fun:"🐉 The Chinese name for longan is 龍眼 (lóng yǎn) meaning 'Dragon's Eye' — because the dark seed shows through the translucent flesh like a giant eyeball!",desc:"Honey-sweet translucent pearls nicknamed 'Dragon's Eye' because they look like eyeballs! Related to lychee but even sweeter and more aromatic.",season:"Jul–Aug",tags:["Dragon eye","Honey sweet","Traditional medicine","Summer treat"]},
+    {name:"Loquat",emoji:"🟡",bg:"#f0a020",sweet:60,acid:35,bitter:15,vitC:1,fun:"🌸 Loquat trees bloom in WINTER and fruit in spring — completely backwards from most fruit trees! This makes them extra precious as the first fresh spring fruit.",desc:"A small golden-orange fruit with a tangy-sweet taste like apricot and mango. The tree flowers in winter so it fruits before almost anything else in spring!",season:"Mar–May",tags:["Winter bloomer","First of spring","Apricot-mango flavour","Medicinal leaves"]},
+    {name:"Chinese Jujube",emoji:"🔴",bg:"#c03030",sweet:85,acid:15,bitter:10,vitC:500,fun:"🏯 Chinese jujubes have been eaten for OVER 4,000 YEARS and appear in ancient Chinese poetry! They're often given as wedding gifts to symbolise fertility.",desc:"Called 'red dates' and eaten for 4,000+ years! Fresh they taste like crispy apples; dried they taste like dates with caramel notes. Incredibly healthy!",season:"Aug–Oct",tags:["4000yr history","Red dates","500mg Vitamin C","Wedding symbol"]},
   ]},
-  36: { name:"Australia", flag:"🇦🇺", fruits:[
-    { name:"Finger Lime", emoji:"🟢", color:"#5a9a2a",
-      desc:"Australia's 'citrus caviar' — tiny green cylinders bursting with spherical pulp vesicles that pop like pearls on the tongue.",
-      fact:"<b>🍽️ Citrus caviar:</b> Finger lime pulp pearls are called 'citrus caviar' by chefs. Each tiny sphere pops individually in the mouth. Heston Blumenthal went obsessive over them.",
-      sweet:30, acid:75, bitter:25, vitC:40, cal:35, water:88,
-      season:"Mar–Aug", tags:["Citrus caviar","Native","Chef's darling","Pearling pulp"] },
-    { name:"Kakadu Plum", emoji:"🟡", color:"#c8b030",
-      desc:"The world's highest natural vitamin C source — 100× more vitamin C per gram than an orange. An Aboriginal superfood for 50,000+ years.",
-      fact:"<b>💊 Vitamin C champion:</b> Kakadu plum contains up to 5,300mg of vitamin C per 100g — making it the richest natural source on Earth. An orange has about 53mg.",
-      sweet:40, acid:90, bitter:30, vitC:5300, cal:55, water:78,
-      season:"Sep–Dec", tags:["World record Vit C","Aboriginal","50,000yr tradition","Superfood"] },
-    { name:"Davidson Plum", emoji:"🔵", color:"#2d3a8b",
-      desc:"A tart, astringent blue-purple native plum with intense flavor — more acid than a lemon, used in gourmet Australian cuisine.",
-      fact:"<b>🎨 Blue jam:</b> Davidson plum jam turns a striking deep blue-purple color. It's so intensely sour that it's almost always cooked with sugar — but the flavor is extraordinary.",
-      sweet:15, acid:95, bitter:35, vitC:60, cal:48, water:84,
-      season:"Jan–Apr", tags:["Tart","Native","Gourmet","Blue-purple"] },
-    { name:"Quandong", emoji:"🔴", color:"#c03020",
-      desc:"The 'native peach' of the Australian desert — a red fruit with a deeply grooved stone, sweet yet slightly salty.",
-      fact:"<b>🦘 Desert survival food:</b> Quandong has been a critical food source for Aboriginal Australians in arid areas for tens of thousands of years. The nut inside is also edible.",
-      sweet:55, acid:40, bitter:20, vitC:5, cal:88, water:77,
-      season:"Sep–Jan", tags:["Desert fruit","Aboriginal","Native peach","Dual-use stone"] },
+  36:{ name:"Australia",flag:"🇦🇺", fruits:[
+    {name:"Finger Lime",emoji:"🟢",bg:"#5a9a2a",sweet:30,acid:75,bitter:25,vitC:40,fun:"🍽️ Finger lime pulp is called 'citrus caviar' by top chefs! Each tiny sphere pops individually in your mouth just like fish roe. Heston Blumenthal went OBSESSED.",desc:"Australia's 'citrus caviar'! Long green cylinders bursting with pearl-like pulp that pops on your tongue. The coolest-looking fruit on Earth!",season:"Mar–Aug",tags:["Citrus caviar","Native","Chef's darling","Pearling pulp"]},
+    {name:"Kakadu Plum",emoji:"🟡",bg:"#c8b030",sweet:40,acid:90,bitter:30,vitC:5300,fun:"💊 Kakadu plum has 5,300mg of vitamin C per 100g — that's 100 TIMES more than an orange! It's the richest natural vitamin C source on the entire planet!",desc:"A small cream-coloured plum that holds the WORLD RECORD for vitamin C! Aboriginal Australians have used it as medicine and food for 50,000+ years!",season:"Sep–Dec",tags:["World record Vit C","Aboriginal","50000yr tradition","Ultimate superfood"]},
+    {name:"Davidson Plum",emoji:"🔵",bg:"#2d3a8b",sweet:15,acid:95,bitter:35,vitC:60,fun:"🎨 Davidson plum jam turns a stunning deep blue-purple colour in the pot! It's so intensely sour it's almost always cooked with sugar — but the flavour is extraordinary.",desc:"A wild deep-blue native plum so sour it puckers your whole face! Makes gorgeous blue-purple jam. Used in gourmet Australian cuisine and bush tucker.",season:"Jan–Apr",tags:["Tart legend","Native blue","Bush tucker","Gourmet"]},
+    {name:"Quandong",emoji:"🔴",bg:"#c03020",sweet:55,acid:40,bitter:20,vitC:5,fun:"🦘 Quandong was a critical survival food for Aboriginal Australians in desert areas for tens of thousands of years. Even the nut inside is edible!",desc:"The 'native peach' of the Australian desert! Red fruit with a deeply grooved stone, slightly salty-sweet. Used for food and medicine for 50,000+ years.",season:"Sep–Jan",tags:["Desert peach","Aboriginal","Dual-use stone","Desert survival"]},
+    {name:"Illawarra Plum",emoji:"🟣",bg:"#5a2080",sweet:55,acid:30,bitter:25,vitC:8,fun:"🌲 The Illawarra plum grows on a tree called the Brown Pine — a prehistoric plant species that has survived since dinosaur times! Ancient fruit from ancient trees!",desc:"A purple-black native plum with a pine-resin hint in its sweet flavour. Grows on trees that are descendants of the dinosaur era! True ancient Aussie fruit.",season:"Apr–Jun",tags:["Dinosaur tree","Native","Resinous hint","Prehistoric survivor"]},
   ]},
-  710: { name:"South Africa", flag:"🇿🇦", fruits:[
-    { name:"Marula", emoji:"🟡", color:"#c8a828",
-      desc:"The elephant's favorite fruit — rich, creamy, and boozy when fermented. The source of the famous Amarula cream liqueur.",
-      fact:"<b>🐘 Elephant bar:</b> Elephants travel long distances specifically to find marula trees. The ripe fallen fruits ferment naturally and elephants eagerly eat them — some appear visibly tipsy afterward.",
-      sweet:70, acid:30, bitter:15, vitC:170, cal:99, water:73,
-      season:"Jan–Mar", tags:["Elephant fruit","Amarula","Fermentable","Wild-harvested"] },
-    { name:"Cape Gooseberry", emoji:"🟡", color:"#d4a020",
-      desc:"A paper-lantern-wrapped golden berry — sweet, tangy, and distinctive with its papery husk.",
-      fact:"<b>🏮 Paper lantern berry:</b> The papery husk is actually a natural protective casing that keeps the berry fresh for months. It was used as a preservative before refrigeration.",
-      sweet:65, acid:50, bitter:20, vitC:11, cal:53, water:85,
-      season:"Feb–Apr", tags:["Paper husk","Golden","Physalis relative","Preservable"] },
-    { name:"Baobab", emoji:"🟤", color:"#8b5e1e",
-      desc:"Fruit of Africa's iconic 'upside-down tree' — the chalky white pulp is 6× richer in vitamin C than oranges.",
-      fact:"<b>🌳 Upside-down tree:</b> The baobab's branches look like roots, giving it the name 'upside-down tree.' Some trees are over 2,000 years old and hollow inside — used as rooms!",
-      sweet:45, acid:60, bitter:20, vitC:300, cal:250, water:12,
-      season:"May–Aug", tags:["Superfood","Ancient tree","Vitamin C","Powdered use"] },
+  710:{ name:"South Africa",flag:"🇿🇦", fruits:[
+    {name:"Marula",emoji:"🟡",bg:"#c8a828",sweet:70,acid:30,bitter:15,vitC:170,fun:"🐘 Elephants SPECIFICALLY travel long distances to find marula trees! The fermented fallen fruits make elephants appear tipsy — they love it!",desc:"The elephant's favourite fruit! Creamy and delicious, fermented into the famous Amarula cream liqueur. Has 8× more vitamin C than an orange!",season:"Jan–Mar",tags:["Elephant favourite","Amarula source","8x Vit C of orange","Wild-harvested"]},
+    {name:"Cape Gooseberry",emoji:"🟡",bg:"#d4a020",sweet:65,acid:50,bitter:20,vitC:11,fun:"🏮 The papery husk that wraps each berry actually PRESERVES it naturally for months! Before refrigerators, this was used as a natural storage solution!",desc:"Golden berries wrapped in a papery lantern husk! Sweet-tangy and perfect in jams, desserts or eaten straight. The husk keeps them fresh for ages!",season:"Feb–Apr",tags:["Paper lantern","Golden berry","Natural preserving","Physalis"]},
+    {name:"Baobab",emoji:"🟤",bg:"#8b5e1e",sweet:45,acid:60,bitter:20,vitC:300,fun:"🌳 Some baobab trees are OVER 2,000 YEARS OLD and so huge their hollow trunks have been used as bus stops, storage rooms and even small pubs!",desc:"Fruit of Africa's legendary 'upside-down tree' — with branches like roots! The chalk-white powder inside has 6× more vitamin C than oranges!",season:"May–Aug",tags:["2000yr old trees","Upside-down tree","Vitamin C powder","Sacred"]},
+    {name:"Natal Plum",emoji:"🩷",bg:"#e85080",sweet:60,acid:45,bitter:20,vitC:10,fun:"🌺 Natal plum is part of the same plant family as frangipani! The beautiful white star flowers appear at the same time as ripe red fruits on the same branch!",desc:"Beautiful red berries that grow alongside gorgeous star-shaped white flowers — the most fragrant fruit tree in South Africa! Tastes like cranberry + plum.",season:"Nov–Mar",tags:["Fragrant flowers","Cranberry-plum taste","Star flowers","Garden treasure"]},
+    {name:"Wild Watermelon",emoji:"🍉",bg:"#e84040",sweet:45,acid:20,bitter:40,vitC:8,fun:"🌱 The bitter wild watermelon from the Kalahari Desert is the ANCESTOR of all watermelons we eat today! It evolved in the harshest desert conditions imaginable.",desc:"The original ancestor of all modern watermelons! Grows in the Kalahari Desert. Mostly bitter, but some sweet specimens were selected over centuries to create today's sweet melons.",season:"Dec–Mar",tags:["Ancestor watermelon","Kalahari Desert","Origin species","Wild and tough"]},
   ]},
-  604: { name:"Peru", flag:"🇵🇪", fruits:[
-    { name:"Lucuma", emoji:"🟡", color:"#d4a830",
-      desc:"The Incan 'Gold of the Incas' — a dry, starchy fruit tasting like maple syrup meets sweet potato, used as a natural sweetener.",
-      fact:"<b>🏺 Incan gold:</b> Lucuma was worshipped by ancient Andean cultures as a symbol of creation. It appears in pottery dating back to 200 CE and was offered to gods.",
-      sweet:80, acid:10, bitter:10, vitC:2, cal:99, water:72,
-      season:"Apr–Jul", tags:["Incan","Natural sweetener","Maple-flavor","Andean"] },
-    { name:"Camu Camu", emoji:"🍒", color:"#c02878",
-      desc:"A tart Amazonian berry with more vitamin C per gram than almost any other food on the planet.",
-      fact:"<b>💊 Amazonian vitamin bomb:</b> Camu camu has about 2,000mg of vitamin C per 100g — roughly 40× more than an orange. It's so sour it's almost always consumed as powder.",
-      sweet:10, acid:98, bitter:30, vitC:2000, cal:17, water:94,
-      season:"Nov–Mar", tags:["Vitamin C","Amazonian","Super sour","Powder use"] },
-    { name:"Chirimoya", emoji:"💚", color:"#3a9a3a",
-      desc:"Mark Twain called it 'the most delicious fruit known to men' — a heart-shaped wonder with creamy, vanilla-custard flesh.",
-      fact:"<b>✍️ Mark Twain approved:</b> After tasting chirimoya in Hawaii, Mark Twain wrote that it was 'deliciousness itself.' It really does taste like a natural vanilla ice cream.",
-      sweet:88, acid:18, bitter:8, vitC:13, cal:75, water:79,
-      season:"Jun–Oct", tags:["Mark Twain's favorite","Custard","Vanilla","Cherimoya"] },
-    { name:"Granadilla", emoji:"🟠", color:"#e87820",
-      desc:"A gentler, sweeter cousin of passion fruit with a hard orange shell — crack it open to find aromatic, crunchy-seeded pulp.",
-      fact:"<b>🐝 Sweetest passion fruit:</b> Among all passion fruit relatives, granadilla is the sweetest and most edible raw. Locals crack them on tables to eat the jelly-seed inside.",
-      sweet:80, acid:35, bitter:10, vitC:24, cal:68, water:82,
-      season:"Mar–Jun", tags:["Sweet","Hard shell","Passion fruit family","Andean"] },
+  604:{ name:"Peru",flag:"🇵🇪", fruits:[
+    {name:"Lucuma",emoji:"🟡",bg:"#d4a830",sweet:80,acid:10,bitter:10,vitC:2,fun:"🏺 Lucuma was worshipped by ancient Andean cultures as a symbol of creation! It appears in ceramic art from 200 CE and was offered to the gods.",desc:"The Inca's 'Gold of the Gods' — a dry, starchy fruit that tastes like maple syrup mixed with sweet potato! Now a trendy natural sweetener worldwide!",season:"Apr–Jul",tags:["Incan gold","Natural sweetener","Maple-sweet","Andean sacred"]},
+    {name:"Camu Camu",emoji:"🍒",bg:"#c02878",sweet:10,acid:98,bitter:30,vitC:2000,fun:"💊 Camu camu is so packed with vitamin C (2,000mg per 100g!) that it's almost never eaten fresh — it's ground into powder and added to smoothies!",desc:"A tiny sour Amazonian berry that is one of the most vitamin C-rich foods on the planet! So sour it's almost always used as powder in drinks!",season:"Nov–Mar",tags:["Vitamin C superstar","Amazon","So sour!","Powder form"]},
+    {name:"Cherimoya",emoji:"💚",bg:"#3a9a3a",sweet:88,acid:18,bitter:8,vitC:13,fun:"✍️ Mark Twain called cherimoya 'the most delicious fruit known to men' after tasting one in Hawaii! It really does taste like natural vanilla custard ice cream.",desc:"Mark Twain's all-time favourite fruit! Heart-shaped with creamy vanilla-custard flesh. Often called 'custard apple' because the taste is SO dessert-like!",season:"Jun–Oct",tags:["Mark Twain's fave","Vanilla custard","Heart-shaped","Dreamy"]},
+    {name:"Aguaje",emoji:"🟠",bg:"#d07030",sweet:50,acid:30,bitter:20,vitC:80,fun:"🦁 Aguaje is eaten by big Amazon wildlife — macaws, tapirs and peccaries all love it! Amazonian women believe it enhances feminine features.",desc:"A scaly red-orange palm fruit with yellow flesh inside, tasting like a tropical mix of cheese and mango! Extremely popular as street food in Iquitos.",season:"Jun–Sep",tags:["Amazon palm","Scaly skin","Wildlife favourite","Street food"]},
+    {name:"Pacay (Ice Cream Bean)",emoji:"🤍",bg:"#70b870",sweet:85,acid:5,bitter:5,vitC:10,fun:"🍦 The white fluffy pulp around pacay seeds is THE most convincing natural vanilla ice cream you'll ever taste! Kids in Peru go absolutely wild for it!",desc:"A giant seed pod hiding cotton-candy-white fluff that tastes exactly like vanilla ice cream! Children crack open the long pods for their cotton-candy surprise!",season:"Dec–Apr",tags:["Tastes like ice cream!","Cotton fluff","Kids love it","Giant pod"]},
   ]},
-  360: { name:"Indonesia", flag:"🇮🇩", fruits:[
-    { name:"Salak (Snake Fruit)", emoji:"🐍", color:"#8b4513",
-      desc:"Scaly brown skin like snake scales hides crisp, acidic-sweet flesh with a dry texture unlike anything else.",
-      fact:"<b>🐍 Actual snake skin:</b> The term 'snake fruit' isn't just poetic — the scaly brown skin genuinely mimics snakeskin at close inspection. The flesh has a wine-vinegar complexity.",
-      sweet:60, acid:55, bitter:20, vitC:9, cal:82, water:78,
-      season:"Year-round", tags:["Unique texture","Scaly skin","Wine-like","Crisp"] },
-    { name:"Durian", emoji:"👑", color:"#d4a000",
-      desc:"Indonesia's thorny leviathan — the divisive king, simultaneously adored and banned, with flesh ranging from butterscotch to onion.",
-      fact:"<b>🏨 Banned everywhere:</b> Jakarta hotels, Komodo tours, and Singapore's MRT all ban durian. Yet Indonesians wait for the season with the intensity of Americans waiting for pumpkin spice.",
-      sweet:78, acid:10, bitter:20, vitC:20, cal:147, water:65,
-      season:"Dec–Feb (peak)", tags:["King of fruits","Thorny","Pungent","Worshipped"] },
-    { name:"Mangosteen", emoji:"💜", color:"#6b2090",
-      desc:"Perfectly round purple queens hiding floral, juicy white segments — grown only in humid tropical rainforests.",
-      fact:"<b>🌧️ Rain-only queen:</b> Mangosteen trees refuse to grow outside tropical rainforests and have resisted cultivation elsewhere for 200+ years of attempts.",
-      sweet:76, acid:40, bitter:18, vitC:3, cal:73, water:81,
-      season:"Jun–Sep", tags:["Queen of fruits","Tropical only","Xanthones","Rainforest"] },
-    { name:"Starfruit", emoji:"⭐", color:"#f4d020",
-      desc:"A waxy yellow fruit that slices into perfect stars — sweet with a hint of apple and citrus, gorgeous in fruit salads.",
-      fact:"<b>⭐ Natural star cuts:</b> Slice starfruit crosswise and every single cut produces a perfect five-pointed star. Zero effort, maximum drama at the fruit bowl.",
-      sweet:62, acid:45, bitter:10, vitC:35, cal:31, water:91,
-      season:"Year-round", tags:["Star shape","Decorative","Low calorie","Oxalate warning"] },
+  360:{ name:"Indonesia",flag:"🇮🇩", fruits:[
+    {name:"Salak",emoji:"🐍",bg:"#8b4513",sweet:60,acid:55,bitter:20,vitC:9,fun:"🐍 Salak skin is actually identical to snake scales under a microscope! The flavour has a wine-like complexity — sweet, acidic and slightly tannic all together.",desc:"The incredible 'Snake Fruit' with actual snake-scale skin! Crispy flesh with a unique sweet-sour-astringent flavour unlike any other fruit on Earth.",season:"Year-round",tags:["Actual snake scales","Crispy","Wine-complex","Unique texture"]},
+    {name:"Rambutan",emoji:"🔴",bg:"#c0392b",sweet:70,acid:28,bitter:8,vitC:66,fun:"🎉 Indonesia is the world's largest rambutan producer! Local varieties in Sumatra and Java have been bred over hundreds of years into dozens of distinct types.",desc:"Hairy red alien fruit hiding sweet translucent flesh inside! Indonesia has hundreds of unique varieties. The name means 'hairy' in Malay — obviously!",season:"Nov–Feb",tags:["Hairy superstar","Hundreds of varieties","Sweet jewel","Indonesian pride"]},
+    {name:"Langsat",emoji:"🟡",bg:"#d4c060",sweet:65,acid:40,bitter:15,vitC:8,fun:"🌕 Langsat seeds glow faintly in the dark! In Indonesia, children sometimes dry the seeds and use them as tiny candles at festivals. Nature's fairy lights!",desc:"Small clusters of pale yellow fruits like translucent grapes! Sweet with a hint of grapefruit. The dried seeds glow in the dark like tiny candles!",season:"Jun–Sep",tags:["Glowing seeds!","Cluster fruit","Grapefruit hint","Festival candles"]},
+    {name:"Starfruit",emoji:"⭐",bg:"#f4d020",sweet:62,acid:45,bitter:10,vitC:35,fun:"⭐ Slice a starfruit crosswise and EVERY single cut makes a perfect five-pointed star! Zero effort, maximum drama at the fruit bowl. Nature's perfect geometry!",desc:"A waxy yellow fruit that slices into perfect five-pointed stars! Crunchy, refreshing, and absolutely stunning to look at. Nature's most geometric fruit!",season:"Year-round",tags:["Perfect star shape","Geometric","Super refreshing","Low calorie"]},
+    {name:"Duku",emoji:"🟤",bg:"#b08040",sweet:70,acid:25,bitter:20,vitC:9,fun:"🌿 Duku trees take 10 to 20 YEARS to produce their first fruit! The trees are considered heirlooms and passed down through generations of Indonesian families.",desc:"Clusters of small yellowish-brown fruits with sweet, juicy flesh. The trees are family heirlooms because they take 20 years to fruit! A treasure worth waiting for.",season:"Dec–Feb",tags:["20yr wait!","Family heirloom","Cluster joy","Generational treasure"]},
   ]},
-  566: { name:"Nigeria", flag:"🇳🇬", fruits:[
-    { name:"Agbalumo", emoji:"🟠", color:"#e86820",
-      desc:"The African star apple — a beloved West African winter fruit with latex-rich skin, tart pulp, and a chewy satisfying bite.",
-      fact:"<b>🎉 Harmattan season joy:</b> Agbalumo is the unofficial fruit of the Nigerian harmattan season (dry winter). Street vendors roam cities selling them by the bag, and their tartness is legendary.",
-      sweet:50, acid:75, bitter:30, vitC:25, cal:67, water:80,
-      season:"Dec–Mar", tags:["West African","Harmattan","Latex-skin","Seasonal joy"] },
-    { name:"Soursop", emoji:"💚", color:"#4a8a2a",
-      desc:"A spiny green giant with cottony white flesh tasting like pineapple crossed with creamy coconut — widely used in Nigerian zobo and drinks.",
-      fact:"<b>🌿 Leaves as medicine:</b> In Nigerian traditional medicine, soursop (graviola) leaves are boiled as tea for everything from fever to inflammation. Research into its compounds is ongoing.",
-      sweet:65, acid:50, bitter:20, vitC:21, cal:66, water:81,
-      season:"Year-round", tags:["Medicinal","Creamy","Pineapple-coconut","Tropical"] },
-    { name:"Baobab Fruit", emoji:"🟤", color:"#9a6020",
-      desc:"Chalky white powder inside a hard shell — a revered ancient superfood of West and Central Africa with extraordinary vitamin C.",
-      fact:"<b>🌳 Sacred giant:</b> Baobab trees can live for 2,000+ years. Communities often gather under them for council meetings, and some hollow trunks have been used as bus stops.",
-      sweet:40, acid:65, bitter:18, vitC:300, cal:250, water:11,
-      season:"Mar–Jun", tags:["Ancient","2000yr trees","Sacred","Powder form"] },
+  566:{ name:"Nigeria",flag:"🇳🇬", fruits:[
+    {name:"Agbalumo",emoji:"🟠",bg:"#e86820",sweet:50,acid:75,bitter:30,vitC:25,fun:"🎉 Agbalumo is the UNOFFICIAL fruit of the Nigerian harmattan season! Street vendors walk through cities with bags of them, and the intense tartness is legendary.",desc:"The African Star Apple — a beloved West African winter fruit! Tart, sticky and chewy with a latex-rich skin. The most talked-about seasonal fruit in Nigeria.",season:"Dec–Mar",tags:["Harmattan season","West African star","Tart legend","Seasonal joy"]},
+    {name:"Soursop",emoji:"💚",bg:"#4a8a2a",sweet:65,acid:50,bitter:20,vitC:21,fun:"🌿 In Nigerian traditional medicine, soursop LEAVES are boiled into tea for fever and pain! Scientists worldwide are studying its compounds with great interest.",desc:"A spiny green giant with cottony white flesh that tastes like pineapple + creamy coconut! Used in drinks, ice cream and traditional medicine across Nigeria.",season:"Year-round",tags:["Medicinal leaves","Pineapple-coconut","Healing tradition","Tropical giant"]},
+    {name:"Udara (White Star Apple)",emoji:"⭐",bg:"#70c080",sweet:72,acid:20,bitter:10,vitC:18,fun:"🌟 When you cut a white star apple crosswise, a perfect star pattern appears! The white latex sap is so sticky it was used as traditional glue!",desc:"A sweet green-white fruit that forms a perfect star pattern when cut! The sticky white sap inside was used as a traditional adhesive. Sweet and milky!",season:"Dec–Feb",tags:["Star pattern","Milky sap","Traditional glue","Sweet gem"]},
+    {name:"African Mango (Ogiri)",emoji:"🥭",bg:"#d4a020",sweet:65,acid:20,bitter:15,vitC:30,fun:"🌳 African mango seeds are ground into a famous West African spice! The powder has a super pungent smell but gives Nigerian dishes a rich, unique depth of flavour.",desc:"A wild West African mango whose fruit is sweet and the seeds are ground into a pungent, beloved spice called 'ogiri' or 'ogbono.' Fruit AND spice in one tree!",season:"Jun–Sep",tags:["Fruit AND spice","Wild mango","Ogiri seeds","West African staple"]},
+    {name:"African Pear (Ube)",emoji:"💜",bg:"#5a2080",sweet:30,acid:20,bitter:30,vitC:5,fun:"🔥 Ube must be warmed or boiled before eating — it tastes awful cold! Street vendors roast them over coals and sell them piping hot in a total Nigerian street food ritual.",desc:"A dark purple-blue pear that MUST be eaten warm — it's eaten almost exclusively as a hot street snack! Buttery and oily, with a flavour like avocado meets olive.",season:"Jul–Oct",tags:["Must eat hot","Street food ritual","Buttery oily","Purple beauty"]},
   ]},
-  170: { name:"Colombia", flag:"🇨🇴", fruits:[
-    { name:"Lulo", emoji:"🟠", color:"#e8a020",
-      desc:"A bright orange nightshade fruit with incredibly sour, bright green interior pulp — Colombia's tangy national obsession.",
-      fact:"<b>🍹 Nacional juice:</b> Lulo juice (called naranjilla in Ecuador) is so popular in Colombia that it outsells orange juice in many regions. The sour punch is addictive.",
-      sweet:30, acid:90, bitter:20, vitC:31, cal:28, water:92,
-      season:"Year-round", tags:["Super sour","Colombian national","Nightshade","Juice staple"] },
-    { name:"Feijoa", emoji:"🟢", color:"#4a9a48",
-      desc:"A fragrant oval fruit with a guava-pineapple-mint aroma — you scoop out the gritty-smooth flesh with a spoon.",
-      fact:"<b>🪥 Scoop and eat:</b> Feijoa is traditionally halved and eaten with a spoon, scooping out the granular-smooth interior. The skin is edible but bitter — most discard it.",
-      sweet:65, acid:35, bitter:25, vitC:32, cal:55, water:83,
-      season:"Apr–Jun", tags:["Aromatic","Pineapple-guava","Scoop fruit","Southern Hemisphere"] },
-    { name:"Tree Tomato", emoji:"🍅", color:"#d83020",
-      desc:"A red-orange egg-shaped fruit that looks like a tomato but tastes like tangy passion fruit mixed with citrus.",
-      fact:"<b>🥤 Jugo de tomate de árbol:</b> Tree tomato juice is a breakfast staple across Colombia, Bolivia, and Ecuador. Blended with sugar and water, it creates a vivid orange-red morning drink.",
-      sweet:45, acid:65, bitter:30, vitC:23, cal:31, water:87,
-      season:"Year-round", tags:["Tamarillo","Breakfast juice","Andean","Egg-shaped"] },
+  170:{ name:"Colombia",flag:"🇨🇴", fruits:[
+    {name:"Lulo",emoji:"🟠",bg:"#e8a020",sweet:30,acid:90,bitter:20,vitC:31,fun:"🍹 Lulo juice is SO popular in Colombia that it outsells orange juice in many regions! The face-puckering sourness is completely addictive to Colombians.",desc:"A bright orange nightshade fruit with shockingly sour green pulp inside! The national juice obsession of Colombia. Super sour, super refreshing, super addictive!",season:"Year-round",tags:["Colombia's #1 juice","Face-puckering sour","Nightshade family","National obsession"]},
+    {name:"Uchuva",emoji:"🟡",bg:"#f0b030",sweet:60,acid:50,bitter:15,vitC:43,fun:"🧙 Uchuva was considered SACRED by the Muisca people of ancient Colombia! They believed it had spiritual healing powers and used it in ceremonies.",desc:"Golden berries in papery husks — sweet-tart and highly nutritious! Considered sacred by ancient Colombian civilizations and now beloved worldwide!",season:"Year-round",tags:["Sacred Muisca fruit","Golden physalis","Worldwide export","Spiritual history"]},
+    {name:"Borojó",emoji:"🟤",bg:"#5a3010",sweet:35,acid:45,bitter:30,vitC:14,fun:"💪 Borojó is locally called 'the love fruit' in the Pacific rainforest because it's believed to be a powerful energy and stamina booster! Very popular!",desc:"A large brown fruit from the Pacific rainforest — super rich and dense with a complex taste. Known locally as the 'love fruit' for its legendary energy boost!",season:"Year-round",tags:["Love fruit","Energy booster","Rainforest treasure","Dense and rich"]},
+    {name:"Chontaduro",emoji:"🟠",bg:"#e06010",sweet:25,acid:15,bitter:20,vitC:8,fun:"🎪 Chontaduro is sold by street vendors in Cali and Medellín with salt and honey — it's the most iconic street food snack of Pacific Colombian cities!",desc:"A starchy, dense palm fruit eaten with salt and honey. The most beloved street snack in Pacific Colombia — eaten millions of times on the streets of Cali!",season:"Jan–Jun",tags:["Street snack","Palm fruit","Salt & honey","Pacific tradition"]},
+    {name:"Guanábana",emoji:"💚",bg:"#3a8a3a",sweet:70,acid:45,bitter:15,vitC:21,fun:"🌿 Guanábana leaves are brewed into tea in Colombia for dozens of remedies! The fruit's compounds are studied globally by pharmaceutical researchers.",desc:"A huge spiny green fruit with cottony white flesh — tastes like pineapple + banana + cream! Makes the most delicious juice and ice cream in all of Colombia.",season:"Year-round",tags:["Spiny giant","Pineapple-banana cream","Medicinal research","Juice legend"]},
   ]},
-  792: { name:"Turkey", flag:"🇹🇷", fruits:[
-    { name:"Cherry", emoji:"🍒", color:"#c02030",
-      desc:"Turkey is the world's largest cherry producer — birthplace of cherries, which get their name from the ancient city of Giresun (Cerasus).",
-      fact:"<b>🏛️ Named by Romans:</b> The Roman general Lucullus brought cherry trees from Giresun (then 'Cerasus') to Rome in 74 BCE. The fruit was literally named after the city.",
-      sweet:70, acid:40, bitter:15, vitC:7, cal:63, water:82,
-      season:"May–Jul", tags:["Ancient origin","Roman import","World's top producer","Stone fruit"] },
-    { name:"Pomegranate", emoji:"🔴", color:"#c01828",
-      desc:"The ancient fruit of paradise — hundreds of ruby seeds in a labyrinthine interior, rich in antioxidants and symbolism.",
-      fact:"<b>🕌 Fruit of paradise:</b> Pomegranate appears in the Quran, the Torah, Greek mythology, and ancient Persian art. The seeds symbolize fertility and abundance across dozens of cultures.",
-      sweet:55, acid:50, bitter:25, vitC:10, cal:83, water:78,
-      season:"Sep–Nov", tags:["Ancient symbol","Ruby seeds","Antioxidant","Multi-faith sacred"] },
-    { name:"Mulberry", emoji:"🫐", color:"#3a1050",
-      desc:"Dark purple mulberries that stain everything they touch — once the foundation of Turkey's silk industry through silkworm cultivation.",
-      fact:"<b>🐛 Silk road root:</b> Turkey's Bursa region was the heartbeat of the Ottoman silk industry — all because of mulberry trees and their silkworm tenants.",
-      sweet:72, acid:30, bitter:18, vitC:36, cal:43, water:88,
-      season:"May–Jun", tags:["Silk road","Staining","Ottoman","Silkworm host"] },
-    { name:"Fig", emoji:"🍑", color:"#9b4080",
-      desc:"Aegean figs from Izmir are Turkey's pride — plump, honey-sweet Calimyrna and Sarilop varieties with caramel notes.",
-      fact:"<b>🐝 Wasp inside:</b> Commercial Smyrna figs require a specific wasp (Blastophaga psenes) for pollination. The wasp enters the fig, pollinates it, and dies inside. The enzyme figain digests it.",
-      sweet:78, acid:18, bitter:14, vitC:2, cal:74, water:79,
-      season:"Aug–Oct", tags:["Izmir pride","Ancient","Wasp-pollinated","Dried delicacy"] },
+  792:{ name:"Turkey",flag:"🇹🇷", fruits:[
+    {name:"Cherry",emoji:"🍒",bg:"#c02030",sweet:70,acid:40,bitter:15,vitC:7,fun:"🏛️ Roman general Lucullus brought cherry trees from the city of Giresun (then called 'Cerasus') to Rome in 74 BCE — and the fruit was LITERALLY named after the city!",desc:"Turkey is the world's #1 cherry producer! The ancient city of Giresun gave cherries their name over 2,000 years ago. Turkish cherries are famed as the world's best.",season:"May–Jul",tags:["Named a city","Turkey #1 producer","Ancient Roman import","World's best"]},
+    {name:"Pomegranate",emoji:"🔴",bg:"#c01828",sweet:55,acid:50,bitter:25,vitC:10,fun:"🕌 Pomegranate appears in the Quran, the Torah, Greek mythology AND ancient Persian art! It's been a sacred symbol across almost every major culture and religion.",desc:"The ancient fruit of paradise! Hundreds of ruby jewel-like seeds in a maze-like interior. Turkey grows some of the world's finest. Sacred to countless civilisations!",season:"Sep–Nov",tags:["Sacred across religions","Ruby seeds","Antioxidant bomb","Symbol of paradise"]},
+    {name:"Fig",emoji:"🍑",bg:"#9b4080",sweet:78,acid:18,bitter:14,vitC:2,fun:"🐝 Smyrna figs (from Izmir) require a specific tiny wasp for pollination! The wasp crawls inside the fig, pollinates it, and dies inside. An enzyme digests the wasp.",desc:"Turkish figs from Izmir (ancient Smyrna) are considered the finest in the world! Honey-sweet with caramel notes. Turkey exports more dried figs than anyone else!",season:"Aug–Oct",tags:["Izmir pride","Wasp-pollinated","Dried delicacy","World's best figs"]},
+    {name:"Quince",emoji:"🍐",bg:"#e8c030",sweet:30,acid:40,bitter:35,vitC:15,fun:"🏺 The ancient city of Kydonia (Crete, near Turkey) gave quinces their scientific name 'Cydonia'! Some historians believe quinces were the original 'golden apples' of Greek mythology!",desc:"A bumpy yellow fruit so tart and hard it must be cooked! But cooked quince turns a gorgeous deep pink-red and tastes like perfumed rose petals. Magical!",season:"Sep–Nov",tags:["Golden apples of myths","Turns pink when cooked","Ancient Kydonia","Perfumed rose"]},
+    {name:"Cornelian Cherry",emoji:"🔴",bg:"#c05050",sweet:40,acid:85,bitter:20,vitC:55,fun:"⚔️ The wood of the cornelian cherry tree is SO hard and dense that it was the preferred material for spears, bows and tool handles in ancient Greece and Rome!",desc:"Tiny, intensely sour red berries from a tree whose wood is harder than iron! Used in syrups, jams and Turkish drinks. One of the oldest cultivated fruits in the world!",season:"Aug–Sep",tags:["Harder than iron wood","Ancient cultivation","Super sour","Roman spear tree"]},
   ]},
-  724: { name:"Spain", flag:"🇪🇸", fruits:[
-    { name:"Valencia Orange", emoji:"🍊", color:"#f47820",
-      desc:"The world's juice orange — Valencia, Spain gave its name to the orange variety that now dominates global orange juice production.",
-      fact:"<b>🥤 Juice king:</b> The Valencia orange is the dominant juice orange worldwide. It was developed in California but named in honor of its Spanish ancestor varieties.",
-      sweet:72, acid:45, bitter:15, vitC:59, cal:47, water:87,
-      season:"Mar–Jun", tags:["Juice orange","Worldwide","Vitamin C","Mediterranean"] },
-    { name:"Clementine", emoji:"🍊", color:"#f4922a",
-      desc:"Easy-peel, seedless, sweet tangerines — a hybrid of mandarin and sweet orange, invented by French missionary Brother Clément.",
-      fact:"<b>✂️ Accidental hybrid:</b> Brother Clément Rodier accidentally created the clementine in his garden in Algeria by crossing a mandarin with a sweet orange around 1902.",
-      sweet:75, acid:30, bitter:10, vitC:49, cal:47, water:87,
-      season:"Nov–Feb", tags:["Easy-peel","Seedless","Accidental hybrid","Christmas staple"] },
-    { name:"Pomegranate", emoji:"🔴", color:"#c02030",
-      desc:"Elche's pomegranates are among the world's finest — Spain is Europe's top producer of this ancient jewel-seeded fruit.",
-      sweet:56, acid:48, bitter:22, vitC:10, cal:83, water:78,
-      fact:"<b>💎 Elche gold:</b> The pomegranate IS the symbol of Granada — the city is literally named after it (granada = pomegranate). The coat of arms features a pomegranate.",
-      season:"Oct–Dec", tags:["Granada symbol","Elche","Europe's best","Ancient"] },
+  724:{ name:"Spain",flag:"🇪🇸", fruits:[
+    {name:"Valencia Orange",emoji:"🍊",bg:"#f47820",sweet:72,acid:45,bitter:15,vitC:59,fun:"🥤 The Valencia orange is the world's #1 JUICE orange! Most of the OJ you've ever drunk was made from this variety. It was developed in California but named after Spain!",desc:"The orange that rules the world's juice! Named after Valencia, Spain, this variety makes the most delicious orange juice on Earth. Sweet, thin-skinned, perfection!",season:"Mar–Jun",tags:["World's #1 juice orange","Your OJ source!","Vitamin C","Mediterranean sun"]},
+    {name:"Clementine",emoji:"🍊",bg:"#f4922a",sweet:75,acid:30,bitter:10,vitC:49,fun:"✂️ Brother Clément Rodier accidentally created clementines in his garden in Algeria around 1902 by crossing a mandarin with a sweet orange! Total happy accident!",desc:"Easy-peel, seedless, impossibly sweet little mandarins! A happy accidental hybrid discovered by a French missionary. The ultimate Christmas fruit in Europe!",season:"Nov–Feb",tags:["Happy accident","Super easy peel","Seedless","Christmas classic"]},
+    {name:"Granada Pomegranate",emoji:"🔴",bg:"#c02030",sweet:58,acid:46,bitter:22,vitC:10,fun:"💎 The city of GRANADA is literally NAMED after the pomegranate! 'Granada' means pomegranate in Spanish. The city's coat of arms features one prominently.",desc:"Spain's iconic fruit — the city of Granada is literally named after it! Spanish pomegranates are among Europe's finest. Ruby seeds, complex and sweet!",season:"Oct–Dec",tags:["City named after it!","Granada symbol","Europe's finest","Ruby treasure"]},
+    {name:"Persimmon (Kaki)",emoji:"🟠",bg:"#e07020",sweet:80,acid:10,bitter:20,vitC:7,fun:"🌅 The Ribera del Xúquer region of Valencia produces the world's most prized persimmons! They're dried traditionally in the Valencian sun to create 'persimon' — a luxury export.",desc:"Valencia's gorgeous orange autumn gems! Spanish 'Rojo Brillante' persimmons are sweet as honey with a jelly-like texture. Dried as luxury gifts worldwide!",season:"Oct–Dec",tags:["Rojo Brillante variety","Sun-dried delicacy","Honey sweet","Valencia treasure"]},
+    {name:"Strawberry (Fresas)",emoji:"🍓",bg:"#e83050",sweet:75,acid:35,bitter:5,vitC:58,fun:"🌊 Huelva, Spain produces 90% of ALL European fresh strawberries! They grow so well next to the Atlantic coast that the industry transformed an entire coastal region.",desc:"Huelva in southern Spain produces 90% of all fresh strawberries eaten in Europe! Grown in sandy coastal soil near the Atlantic, these are Europe's sweetest berries!",season:"Jan–Apr",tags:["Europe's strawberry capital","Huelva power","90% of EU supply","Atlantic coast"]},
+  ]},
+  250:{ name:"France",flag:"🇫🇷", fruits:[
+    {name:"Mirabelle Plum",emoji:"🟡",bg:"#f0d030",sweet:78,acid:20,bitter:12,vitC:9,fun:"👑 Lorraine, France has a LEGAL monopoly on the name 'Mirabelle de Lorraine'! They produce 70% of the world's supply and guard the name fiercely like a crown jewel.",desc:"Tiny golden plums from Lorraine with a honey-sweet floral flavour unlike any other plum! France produces 70% of the world's supply and protects the name by law!",season:"Aug–Sep",tags:["Lorraine monopoly","Golden honey plum","Protected name","French treasure"]},
+    {name:"Gariguette Strawberry",emoji:"🍓",bg:"#e83060",sweet:80,acid:38,bitter:5,vitC:58,fun:"🎩 French food critics consider the Gariguette SO superior to other strawberries that they dedicated a book to it! Parisians queue outside shops when it first arrives.",desc:"France's most prized strawberry — elongated, deep red and intensely fragrant! When Gariguette season begins, Paris goes wild. The fashionista of strawberries!",season:"Apr–Jun",tags:["French prestige","Elongated shape","Intense fragrance","Paris goes wild"]},
+    {name:"Muscat Grape",emoji:"🍇",bg:"#c898d8",sweet:90,acid:18,bitter:8,vitC:4,fun:"🎵 Muscat grapes are described as 'the grape that smells like perfume.' The ancient Muscat Blanc à Petits Grains variety has been grown for 3,000 years without changing!",desc:"The world's most aromatic grape — smells like rose petals and orange blossom! One of the oldest grape varieties known, grown in Provence and Alsace since ancient times.",season:"Aug–Sep",tags:["Most aromatic grape","3000yr old variety","Perfume grape","Provence treasure"]},
+    {name:"Prune d'Agen",emoji:"🟣",bg:"#502870",sweet:80,acid:15,bitter:18,vitC:1,fun:"✈️ Crusaders brought Agen plum cuttings back from Damascus in the 12th century! The tree made the journey across the Mediterranean and found its forever home in Agen.",desc:"The most famous dried plum (prune) in the world! Brought to France by Crusaders from Damascus 900 years ago. Sweet, soft, caramel-rich and utterly French.",season:"Aug–Sep",tags:["Crusader import","900yr history","Caramel-sweet","French classic"]},
+    {name:"Calvados Apple",emoji:"🍎",bg:"#c03020",sweet:65,acid:45,bitter:20,vitC:5,fun:"🍺 Normandy has OVER 700 varieties of apple used just for making Calvados — the famous apple brandy! The orchard landscapes have been unchanged for 500 years.",desc:"Normandy's cider and Calvados apples! Over 700 unique varieties grown in ancient orchards for 500+ years. France's answer to wine grapes — but apples!",season:"Sep–Nov",tags:["700 varieties!","Calvados brandy","500yr orchards","Normandy pride"]},
+  ]},
+  504:{ name:"Morocco",flag:"🇲🇦", fruits:[
+    {name:"Medjool Date",emoji:"🟤",bg:"#c07830",sweet:90,acid:5,bitter:10,vitC:1,fun:"👑 Medjool dates were ONLY eaten by royalty for centuries! They were called the 'King of Dates' and commoners were not allowed to taste them. Now everyone can!",desc:"The King of Dates — massive, soft and tasting of rich caramel and honey! For centuries these were exclusively eaten by Moroccan royalty. Now a worldwide superfood!",season:"Sep–Nov",tags:["Royal fruit","Caramel honey","King of dates","Ancient royalty"]},
+    {name:"Prickly Pear",emoji:"🟣",bg:"#9b3090",sweet:68,acid:32,bitter:12,vitC:14,fun:"🌵 Morocco has miles of prickly pear cactus hedges used as NATURAL FENCES for farms! The cactus arrived from Mexico 500 years ago and completely took over the landscape.",desc:"Sweet, seedy cactus fruits sold on every Moroccan street corner! Peeled on the spot by vendors with lightning speed. Purple, orange or yellow — all delicious!",season:"Jul–Oct",tags:["Street corner classic","Natural fence cactus","Mexican origin","Three colours"]},
+    {name:"Argan Fruit",emoji:"🟡",bg:"#c8a820",sweet:30,acid:20,bitter:50,vitC:5,fun:"🐐 Goats in Morocco CLIMB argan trees to eat the fruits! Then the undigested seeds are collected from their... droppings and pressed into the world's most expensive oil!",desc:"The source of argan oil — the world's most expensive edible oil! The fleshy fruit is yellow-green, but the real value is the seed. And yes, goats harvest them uniquely!",season:"Jun–Aug",tags:["World's priciest oil","Goat-harvested seeds","Beauty + food oil","UNESCO protected"]},
+    {name:"Blood Orange",emoji:"🩸",bg:"#c02828",sweet:66,acid:54,bitter:18,vitC:65,fun:"🌙 Moroccan blood oranges get their intense red colour from cold desert nights! The extreme temperature difference between Marrakesh days and nights creates dramatic colour.",desc:"Morocco's blood oranges are rivals to Sicily's! Grown in the Atlas Mountain foothills where cold nights create the stunning red flesh. Incredible flavour and colour!",season:"Jan–Mar",tags:["Atlas Mountain grown","Cold night colour","Sicilian rival","Deep red jewel"]},
+  ]},
+  404:{ name:"Kenya",flag:"🇰🇪", fruits:[
+    {name:"Passion Fruit",emoji:"💜",bg:"#7e2d8e",sweet:58,acid:78,bitter:12,vitC:30,fun:"🏆 Kenya is the world's largest EXPORTER of passion fruit! The purple variety from the highlands around Nairobi is considered the world's finest by juice makers.",desc:"Kenya's purple highland passion fruits are considered the world's finest! The tangy-sweet purple varieties from the cool Kenyan highlands export globally.",season:"Year-round",tags:["World's #1 exporter","Highland grown","Finest purple","Global juice king"]},
+    {name:"Mango (Apple Mango)",emoji:"🥭",bg:"#f4a020",sweet:88,acid:18,bitter:5,vitC:36,fun:"🍏 The 'Apple Mango' is Kenya's signature variety — round like an apple, so sweet it drips, and so beloved that Nairobi has mango vendors on almost every block!",desc:"Kenya's beloved Apple Mango — round, sweet, dripping with juice! The iconic Nairobi street fruit. So popular that it's practically a national symbol!",season:"Oct–Dec, Mar–May",tags:["Kenya's signature","Round & sweet","Nairobi icon","Street food star"]},
+    {name:"Tamarind",emoji:"🤎",bg:"#8b6914",sweet:35,acid:88,bitter:18,vitC:4,fun:"🌊 Kenya's coastal Swahili communities have used tamarind in cooking for over 1,000 years! The word 'tamarind' even comes from Arabic (tamar hindi = Indian date)!",desc:"Loved along Kenya's Swahili coast for over a thousand years! Used in biriani rice, sauces and as a snack pod. The Arabic name means 'Indian date'!",season:"Jul–Sep",tags:["1000yr Swahili tradition","Arabic name","Coastal classic","Biriani spice"]},
+    {name:"Baobab",emoji:"🟤",bg:"#9a6020",sweet:42,acid:63,bitter:18,vitC:300,fun:"🦁 Kenya's baobab trees are meeting spots for lions, leopards and elephants alike! Some individual trees are over 1,500 years old and treated as living community monuments.",desc:"Fruit of Africa's sacred tree! The white chalky powder is scooped from the hard shell and stirred into water or porridge. Animals and humans have shared this tree forever!",season:"Apr–Jun",tags:["Wildlife meeting tree","1500yr old trees","Vitamin C rich","Community sacred"]},
+    {name:"Cape Gooseberry",emoji:"🟡",bg:"#d4a820",sweet:62,acid:48,bitter:18,vitC:11,fun:"🌄 Cape gooseberries thrive in Kenya's cool highland climate around Mount Kenya and the Aberdares. They're now one of Kenya's fastest-growing export crops!",desc:"Golden lantern berries grown in the cool Kenyan highlands! Picked in their paper husks and sold fresh or made into jam. A rising star in Kenya's fruit exports!",season:"Year-round",tags:["Highland grown","Paper lantern","Export rising star","Sweet-tart golden"]},
+  ]},
+  608:{ name:"Philippines",flag:"🇵🇭", fruits:[
+    {name:"Calamansi",emoji:"🟢",bg:"#78b820",sweet:20,acid:88,bitter:30,vitC:47,fun:"🇵🇭 Calamansi is squeezed onto EVERYTHING in the Philippines — rice, noodles, seafood, soups, juices! Life without calamansi is unthinkable for Filipinos.",desc:"The Philippines' most essential citrus! Tiny, sour-sweet and squeezed onto literally everything. The Filipino equivalent of salt — added to almost every meal!",season:"Year-round",tags:["Filipino essential","On everything!","Tiny sour powerhouse","National citrus"]},
+    {name:"Carabao Mango",emoji:"🥭",bg:"#f4c020",sweet:95,acid:12,bitter:3,vitC:36,fun:"🏆 The Carabao mango won the Guinness World Record for the SWEETEST MANGO in the world! With a Brix reading of 22.19°, it's scientifically the sweetest!",desc:"The sweetest mango in the world — OFFICIALLY! Certified by Guinness World Records! Honey-like, fibre-free, bright yellow. The pride of the Philippine archipelago!",season:"Apr–Jun",tags:["Guinness sweetest!","World record","Honey mango","Philippine pride"]},
+    {name:"Santol",emoji:"🟡",bg:"#d4b030",sweet:50,acid:60,bitter:30,vitC:14,fun:"🎯 Filipinos eat santol in a totally unique way — they suck the sour-sweet flesh off the giant seed inside! The seed itself is inedible but it's the easiest way to eat it.",desc:"A cottony yellow fruit with juicy-sour flesh clinging to a giant seed! Eaten by sucking the flesh off the seed — a totally unique Filipino eating technique!",season:"Jun–Sep",tags:["Suck-off-the-seed","Unique eating","Cottony yellow","Filipino favourite"]},
+    {name:"Lanzones",emoji:"🟡",bg:"#d4c050",sweet:72,acid:22,bitter:18,vitC:8,fun:"🕯️ Each October, Camiguin island holds a LANZONES FESTIVAL with a parade, dancing and everyone crowned in lanzones fruit garlands! The whole island turns into a fruit party!",desc:"Clusters of sweet little fruits like grapes! Peel back the thin skin to find translucent sweet flesh. The star of the annual Lanzones Festival on Camiguin Island!",season:"Oct–Nov",tags:["Festival fruit","Camiguin island","Sweet clusters","Grape-like jewels"]},
+    {name:"Atis (Sugar Apple)",emoji:"💚",bg:"#3a9a3a",sweet:88,acid:10,bitter:8,vitC:24,fun:"🌿 Sugar apple belongs to the same plant family as cherimoya! Both were cultivated by pre-Columbian civilizations and taste like nature's custard ice cream.",desc:"A bumpy green fruit hiding incredible creamy, sugary white flesh! Each lobe separates to reveal a segment. Like nature's own pack of creamy, sweet candy!",season:"Aug–Dec",tags:["Custard candy","Bumpy treasure","Pre-Columbian","Sweet white flesh"]},
+  ]},
+  704:{ name:"Vietnam",flag:"🇻🇳", fruits:[
+    {name:"Dragon Fruit",emoji:"🐉",bg:"#e91e8c",sweet:52,acid:20,bitter:5,vitC:9,fun:"🌵 Vietnam is the world's LARGEST dragon fruit exporter! The Binh Thuan province alone produces millions of tons. The entire landscape glows pink-red at harvest time!",desc:"Vietnam is the world champion of dragon fruit! Fields upon fields of pink-red cactus fruits. Binh Thuan province exports them to 40+ countries worldwide!",season:"Jun–Nov",tags:["World's #1 exporter","Cactus superstar","Pink landscape","40 countries"]},
+    {name:"Pomelo",emoji:"🍈",bg:"#d4c840",sweet:62,acid:32,bitter:28,vitC:61,fun:"🌕 The Doan Hung pomelo from northern Vietnam is so famous it was officially presented as a GIFT to Ho Chi Minh by local farmers every harvest season!",desc:"Vietnam's prized pomelos are legendary — especially the Doan Hung variety from the north, famously gifted to Ho Chi Minh every harvest! Giant, sweet, refreshing!",season:"Sep–Nov",tags:["Ho Chi Minh's gift","Doan Hung variety","Giant & sweet","Northern Vietnam"]},
+    {name:"Longan",emoji:"🟡",bg:"#c8a848",sweet:80,acid:16,bitter:5,vitC:84,fun:"🎆 The Hung Yen province in Vietnam is the LONGAN CAPITAL of the world! During the annual longan harvest, whole towns smell like sweet honey and flowers for weeks!",desc:"Vietnam's Hung Yen province is the longan capital of the world! During harvest season, entire towns fill with the sweet floral scent. The whole province becomes fragrant!",season:"Jul–Aug",tags:["Hung Yen capital","Whole-town fragrance","Honey-sweet","Dragon eye"]},
+    {name:"Mangosteen",emoji:"💜",bg:"#6b2090",sweet:76,acid:40,bitter:18,vitC:3,fun:"🌧️ Mangosteen trees have NEVER been successfully grown outside tropical rainforests despite 200+ years of attempts! They simply refuse to adapt to other climates.",desc:"The royal purple Queen of Fruits! Vietnam's tropical south is perfect for mangosteen. Snow-white floral segments hide inside the thick purple shell. Perfect!",season:"May–Sep",tags:["Queen of fruits","Refuses to adapt","200yr mystery","Rainforest only"]},
+    {name:"Rambutan",emoji:"🔴",bg:"#c0392b",sweet:68,acid:30,bitter:8,vitC:66,fun:"🎪 In southern Vietnam, rambutan sellers set up giant pink-red piles at roadside markets! The hairy red fruit piled high looks like a fluffy alien art installation!",desc:"Vietnam's southern provinces grow spectacular rambutan! The hairy red fruits piled at roadside markets look like alien mountains of fluff. Sweet, juicy, totally fun!",season:"May–Aug",tags:["Roadside piled high","Southern Vietnam","Sweet pearl","Alien mountain art"]},
+  ]},
+  458:{ name:"Malaysia",flag:"🇲🇾", fruits:[
+    {name:"Musang King Durian",emoji:"👑",bg:"#d4a000",sweet:80,acid:8,bitter:22,vitC:20,fun:"💰 A single Musang King durian can sell for over RM80 in Malaysia — a premium fruit that sends collectors on literal MIDNIGHT FOREST HUNTS to find the best ones!",desc:"The ultimate durian — the legendary Musang King! Bittersweet, creamy, intensely complex. Malaysian durian collectors go on midnight forest expeditions to find prime ones!",season:"Jun–Aug",tags:["Ultimate durian","Midnight hunts","Bittersweet legend","Collector's obsession"]},
+    {name:"Rambutan",emoji:"🔴",bg:"#c0392b",sweet:72,acid:25,bitter:8,vitC:66,fun:"🌺 Malaysia has over 30 unique rambutan varieties, each with different sweetness and texture profiles! Kampung Baharu in KL holds an annual rambutan tasting competition!",desc:"Malaysia's rambutan varieties are unmatched — 30+ unique types! From sweet-mild to intensely flavoured. The hairy red alien fruit is a Malaysian backyard staple.",season:"May–Aug",tags:["30+ varieties!","Malaysian backyard","Tasting competitions","Hairy superstar"]},
+    {name:"Langsat/Duku",emoji:"🟡",bg:"#d4c060",sweet:68,acid:38,bitter:18,vitC:8,fun:"🌕 Langsat skin burns like incense! In Malaysia, dried langsat skins are burned to repel mosquitoes — the smoke has a sweet aromatic scent unlike any bug spray!",desc:"Sweet clusters of tiny pearls! Langsat skins, when dried and burned, repel mosquitoes with fragrant sweet smoke. Malaysia uses them as natural insect repellent!",season:"Jul–Nov",tags:["Natural mosquito repellent!","Sweet pearl clusters","Skin burns fragrant","Incense fruit"]},
+    {name:"Starfruit (Belimbing)",emoji:"⭐",bg:"#f4d020",sweet:62,acid:45,bitter:10,vitC:35,fun:"🌟 Malaysia is the world's top producer of starfruit! The Muar district in Johor state is the 'Starfruit Kingdom' — the most geometrically perfect fruit on Earth grown here!",desc:"Malaysia's 'Starfruit Kingdom' in Johor produces the world's finest! Perfect five-pointed stars in every slice. The most photogenic fruit in existence!",season:"Year-round",tags:["World's top producer","Johor Kingdom","Perfect geometry","Most photogenic fruit"]},
+    {name:"Pulasan",emoji:"🔴",bg:"#a02020",sweet:80,acid:15,bitter:5,vitC:20,fun:"💪 'Pulasan' comes from the Malay word 'pulas' meaning to twist! You open the fruit by TWISTING it apart — it makes a satisfying pop and the sweet flesh bursts out!",desc:"Rambutan's sweeter, rounder cousin! Opened by twisting (hence the name) rather than cutting. More intensely sweet than rambutan with a stronger floral flavour!",season:"Sep–Jan",tags:["Twist to open!","Sweeter than rambutan","Pop of sweetness","Rambutan cousin"]},
+  ]},
+  410:{ name:"South Korea",flag:"🇰🇷", fruits:[
+    {name:"Korean Pear (Bae)",emoji:"🍐",bg:"#e8d880",sweet:72,acid:18,bitter:8,vitC:7,fun:"🥩 Korean pear juice is used as a MEAT TENDERISER! The enzyme actinidin in the pear breaks down proteins — cooks marinate beef in grated Korean pear to make it melt-tender.",desc:"Giant, spherical, super crispy pears with a delicate honey flavour! Famous for being used as meat tenderiser in Korean BBQ marinades. Crunchy and refreshing!",season:"Aug–Nov",tags:["Meat tenderiser!","BBQ marinade magic","Super crispy","Giant sphere"]},
+    {name:"Hallabong",emoji:"🍊",bg:"#f47820",sweet:80,acid:30,bitter:12,vitC:45,fun:"🏔️ Hallabong only grows on Jeju Island under the shadow of Mount Halla! The volcanic soil and ocean breeze create a flavour impossible to replicate anywhere else.",desc:"A premium Korean citrus grown ONLY on Jeju Island's volcanic slopes! Sweet, aromatic and perfectly shaped. The flavour is unique to Jeju's volcanic soil and sea air!",season:"Jan–Feb",tags:["Jeju Island exclusive","Volcanic soil magic","Impossible to replicate","Premium gift"]},
+    {name:"Maesil (Green Plum)",emoji:"🟢",bg:"#70a830",sweet:15,acid:88,bitter:30,vitC:13,fun:"🍹 Every June, Korean families hold MAESIL-MAKING DAYS! Whole families gather to harvest green plums, sugar-pickle them into syrup or ferment them into maesil-ju (plum wine)!",desc:"Hard, sour green plums that are NEVER eaten fresh! Always pickled into sweet syrup, fermented into wine, or made into maesil-cheong. A Korean family ritual fruit!",season:"May–Jun",tags:["Never eaten fresh!","Family ritual","Plum syrup tradition","June gathering"]},
+    {name:"Aronia (Chokeberry)",emoji:"🫐",bg:"#3a1050",sweet:20,acid:70,bitter:65,vitC:21,fun:"😖 Aronia is called 'chokeberry' because eating them raw makes your mouth tighten and go completely DRY from the intense tannins! Yet Koreans love them as a health drink!",desc:"The legendary 'chokeberry' — so astringent it makes your mouth seize up if eaten raw! Koreans love them as super-healthy juice despite the face-puckering sourness!",season:"Aug–Sep",tags:["Mouth-seizing tannins!","Chokeberry","Health hero","Face-puckering"]},
+    {name:"Yuja (Yuzu)",emoji:"🍋",bg:"#f5d040",sweet:30,acid:75,bitter:35,vitC:150,fun:"☕ Koreans make yuja-cha (citrus honey tea) by stirring spoons of yuja marmalade into hot water! In winter, this is the most comforting drink in all of Korea.",desc:"Korea's fragrant yuzu! Made into the beloved yuja-cha — a spoonful of yuja marmalade stirred into hot water makes the ultimate Korean winter comfort drink!",season:"Nov–Jan",tags:["Yuja-cha winter tea","Korean comfort drink","Honey marmalade","Fragrant citrus"]},
+  ]},
+  554:{ name:"New Zealand",flag:"🇳🇿", fruits:[
+    {name:"Kiwifruit",emoji:"🥝",bg:"#5a9a20",sweet:68,acid:48,bitter:12,vitC:93,fun:"✈️ Kiwifruit was renamed from 'Chinese Gooseberry' to 'Kiwifruit' in the 1950s by New Zealand exporters because 'Chinese' sounded too political during the Cold War!",desc:"New Zealand's most famous export! Furry brown outside, emerald green inside. Renamed from 'Chinese Gooseberry' for Cold War political reasons! A true Cold War fruit!",season:"May–Oct",tags:["Cold War name change!","NZ #1 export","Furry outside","Vitamin C rich"]},
+    {name:"Feijoa",emoji:"🟢",bg:"#4a9a48",sweet:65,acid:35,bitter:25,vitC:32,fun:"🏡 Feijoa trees are in almost every New Zealand backyard! In autumn, so many fall that NZers leave buckets of them on footpaths for neighbours to take for FREE!",desc:"New Zealand's beloved backyard fruit! Guava-pineapple-mint scented oval fruits. So common in NZ backyards that people leave buckets of them on the street for free!",season:"Apr–Jun",tags:["Free on footpaths!","Every backyard has one","Guava-pineapple-mint","NZ backyard classic"]},
+    {name:"Boysenberry",emoji:"🟣",bg:"#5a2080",sweet:65,acid:55,bitter:20,vitC:19,fun:"🧑‍🌾 Boysenberries were INVENTED in the 1920s by Rudolph Boysen who then abandoned his farm! Walt Disney's partner Walter Knott saved the abandoned vines and named the berry.",desc:"A hybrid of raspberry, blackberry and loganberry — invented in the 1920s and abandoned by its creator! New Zealand is now the world's biggest producer!",season:"Nov–Jan",tags:["Invented then abandoned","NZ top producer","Triple hybrid","Walt Disney connection"]},
+    {name:"Tamarillo",emoji:"🔴",bg:"#d83020",sweet:45,acid:65,bitter:30,vitC:23,fun:"📛 The tamarillo was literally RENAMED by New Zealand marketing people in 1967! It was boring 'tree tomato' before — they invented the exotic name 'tamarillo' to boost sales!",desc:"New Zealand INVENTED the name 'tamarillo' in 1967 for better marketing! A red-orange egg-shaped fruit with tangy, complex flavour eaten sprinkled with sugar.",season:"Apr–Aug",tags:["Name invented in 1967!","Marketing genius","Egg-shaped","Sprinkle with sugar"]},
+  ]},
+  388:{ name:"Jamaica",flag:"🇯🇲", fruits:[
+    {name:"Ackee",emoji:"🟡",bg:"#f0c030",sweet:20,acid:10,bitter:20,vitC:30,fun:"☠️ Ackee is Jamaica's NATIONAL FRUIT but it's DEADLY if eaten before it opens naturally! The unripe fruit contains hypoglycin-A toxin. NEVER eat a closed ackee!",desc:"Jamaica's national fruit — and incredibly, it's POISONOUS if eaten before it opens naturally! Once open, the yellow flesh is cooked into Jamaica's national dish with saltfish.",season:"Jan–Mar, Jun–Aug",tags:["National fruit","Poisonous if closed!","National dish","Dangerous beauty"]},
+    {name:"Star Apple",emoji:"🌟",bg:"#9040a0",sweet:72,acid:12,bitter:8,vitC:18,fun:"🌟 Star Apple has a silky milky juice inside that children call 'the milk of the tree'! Jamaican kids squeeze the cheeks together to make the fruit squirt milky sweet juice!",desc:"A gorgeous purple-green fruit with milky sweet juice inside! Jamaican children squeeze the sides to make 'milk' squirt out! Cut it in half to see a perfect white star.",season:"Feb–Apr",tags:["Milky tree juice","Kids' favourite","Perfect star cut","Purple-green beauty"]},
+    {name:"Guinep",emoji:"🟢",bg:"#508030",sweet:65,acid:45,bitter:20,vitC:6,fun:"🎄 Guinep is Jamaica's unofficial CHRISTMAS FRUIT! Huge clusters appear just before the holidays and are sold at every roadside. Families share them like natural candy!",desc:"Small green grapes in clusters eaten by cracking with your teeth! The tangy orange flesh clings to a big seed. THE Jamaican Christmas and street party fruit!",season:"Jun–Sep",tags:["Christmas fruit","Crack with teeth","Orange flesh","Cluster candy"]},
+    {name:"Breadfruit",emoji:"🍏",bg:"#78a830",sweet:25,acid:10,bitter:15,vitC:29,fun:"⛵ Captain Bligh of the famous Mutiny on the Bounty was trying to TRANSPORT BREADFRUIT from Tahiti to Jamaica when the mutiny happened! The fruit caused one of history's most famous rebellions!",desc:"A starchy staple that sustained Caribbean communities for centuries! Captain Bligh's ship mutiny was literally caused by his attempt to bring breadfruit to Jamaica! History's most dramatic fruit!",season:"Jun–Sep",tags:["Caused a mutiny!","Starchy staple","Captain Bligh","Caribbean history"]},
+    {name:"Naseberry (Sapodilla)",emoji:"🟫",bg:"#9a6020",sweet:78,acid:10,bitter:8,vitC:15,fun:"🍬 Naseberry (called chicle in Mexico) is the original ingredient in all commercial chewing gum! The tree sap was harvested in Jamaica and exported to American gum factories!",desc:"The sweet caramel-brown fruit of the sapodilla tree — and the source of CHEWING GUM! The tree's sticky latex was harvested in Jamaica for American gum factories!",season:"Oct–Feb",tags:["Original chewing gum!","Caramel sweet","Latex to gum factories","Chicle history"]},
+  ]},
+  300:{ name:"Greece",flag:"🇬🇷", fruits:[
+    {name:"Corinthian Currant",emoji:"🟤",bg:"#5a2830",sweet:75,acid:22,bitter:15,vitC:2,fun:"📦 Corinthian currants were THE most traded commodity of the entire ancient world! Medieval Europeans called them 'raisins de Corinthe' and valued them more than gold at times.",desc:"Tiny dried black grapes from the ancient city of Corinth! THE most traded commodity of the medieval world — more valuable than gold per weight at their peak!",season:"Aug–Sep",tags:["Medieval gold","Most traded ancient good","Tiny powerhouse","Corinth origin"]},
+    {name:"Kalamata Fig",emoji:"🍑",bg:"#9b4080",sweet:80,acid:16,bitter:14,vitC:2,fun:"🏺 Figs were so important to ancient Greece that there were LAWS against exporting the best figs! Stealing premium figs was a serious crime — giving us the word 'sycophant'!",desc:"Greece's legendary figs from Kalamata! Figs were so prized in ancient Greece that exporting the best ones was illegal! The word 'sycophant' literally means 'fig informer'!",season:"Jul–Oct",tags:["Export was illegal!","Sycophant origin","Ancient sacred","Kalamata origin"]},
+    {name:"Chios Mandarin",emoji:"🍊",bg:"#f47820",sweet:76,acid:32,bitter:12,vitC:35,fun:"🏝️ Chios Island mandarins are famous across Greece for their exceptional fragrance! The unique volcanic soil of Chios Island gives them an aromatic intensity found nowhere else.",desc:"Mandarins from the mythical Chios Island — birthplace of Homer! The volcanic soil creates a uniquely intense fragrance. Easier to peel than almost any other citrus!",season:"Nov–Feb",tags:["Homer's island","Volcanic soil fragrance","Mythical origin","Ultra-aromatic"]},
+    {name:"Quince",emoji:"🍐",bg:"#e8c030",sweet:28,acid:42,bitter:38,vitC:15,fun:"💛 The ancient Greek city of Kydonia (Crete) gave the quince its scientific name 'Cydonia oblonga'! Many historians believe quinces were the original golden apples of Greek mythology!",desc:"The golden apple of myth! Ancient Greeks planted quinces at weddings as symbols of love. Raw they're too hard and sour, but cooked they turn gorgeous rose-pink!",season:"Sep–Nov",tags:["Original golden apple?","Wedding tradition","Turns pink!","Mythological"]},
+    {name:"Sultana Grape",emoji:"🍇",bg:"#d4a040",sweet:85,acid:20,bitter:8,vitC:4,fun:"☀️ Sultana grapes are dried naturally by LAYING THEM ON THE GROUND in the blazing Greek sun for 2–3 weeks! No machines, no chemicals — just Greek sunlight and ancient tradition.",desc:"Greece's beloved seedless golden raisins — dried by the sun on the ground for weeks! The world calls them 'sultanas' after the Ottoman sultans who loved them!",season:"Aug–Sep",tags:["Sun-ground dried","Named for sultans","Seedless golden","Ancient sun drying"]},
+  ]},
+  276:{ name:"Germany",flag:"🇩🇪", fruits:[
+    {name:"Morello Cherry",emoji:"🍒",bg:"#8a1020",sweet:35,acid:80,bitter:20,vitC:16,fun:"🎂 The Black Forest Cake (Schwarzwälder Kirschtorte) is LEGALLY required to contain Black Forest cherries — Morello cherries soaked in Kirschwasser (cherry schnapps)! Yes, there's a law!",desc:"The sour cherry of the Black Forest! The only cherry allowed BY LAW in Black Forest Cake! Dark, tart and transformed into schnapps and syrup. Germany's most famous fruit!",season:"Jun–Aug",tags:["Black Forest Cake law!","Kirschwasser source","Legally protected","Tart and proud"]},
+    {name:"Mirabelle Plum",emoji:"🟡",bg:"#e8d030",sweet:76,acid:22,bitter:12,vitC:9,fun:"🎵 In the Lorraine-Saarland border region, the Mirabelle harvest festival is a massive event with music, dancing and eating! The plums fall so thick you can hear them hitting the ground.",desc:"Golden honey plums beloved in the Saarland and Rhineland regions! So sweet they're eaten warm off the tree. Germany and France fight lovingly over who grows them best!",season:"Aug–Sep",tags:["Harvest festival","Honey-sweet","Germany vs France","Golden perfection"]},
+    {name:"Sea Buckthorn",emoji:"🟠",bg:"#e08020",sweet:15,acid:88,bitter:30,vitC:695,fun:"💊 Sea buckthorn has an INCREDIBLE 695mg of vitamin C per 100g — 12 times more than an orange! It was used by Soviet cosmonauts as a radiation-protective superfood!",desc:"Tiny orange coastal berries with a sour-electric taste and 12× the vitamin C of oranges! Used by Soviet cosmonauts as radiation protection! Germany's ultimate superfood berry!",season:"Sep–Oct",tags:["12x Vit C of orange!","Cosmonaut superfood","Radiation protection","Super sour"]},
+    {name:"Elderberry",emoji:"🔵",bg:"#302080",sweet:30,acid:55,bitter:45,vitC:36,fun:"🧙 Elder trees were considered MAGICAL in German folklore — it was bad luck to cut one down without asking the Elder Mother spirit for permission first! Very serious business.",desc:"Dark purple elderberries used in Germany for generations! Made into immune-boosting syrup, wine and jam. The elder tree was considered sacred in German folklore — you'd ask its spirit before cutting it!",season:"Aug–Sep",tags:["Magical tree spirit","Immune booster","German folklore","Elder Mother sacred"]},
+    {name:"Lingonberry",emoji:"🔴",bg:"#c02830",sweet:30,acid:72,bitter:30,vitC:15,fun:"🫏 German Lingonberry sauce (Preiselbeeren) is the MANDATORY accompaniment to venison and game dishes! It's an unbreakable food tradition — game without lingonberry sauce is almost illegal!",desc:"Tart red berries from German and Scandinavian forests! Made into the bright red sauce served with venison and game. A forest berry with an iron grip on German culinary tradition!",season:"Aug–Oct",tags:["Mandatory with game!","Forest treasure","Preiselbeeren sauce","Unbreakable tradition"]},
+  ]},
+  818:{ name:"Egypt",flag:"🇪🇬", fruits:[
+    {name:"Medjool Date",emoji:"🟤",bg:"#c07830",sweet:90,acid:5,bitter:10,vitC:1,fun:"🏺 Dates are depicted in 5,000-YEAR-OLD Egyptian tomb paintings as offerings to the gods! Pharaohs were buried with date palms so they'd have food in the afterlife.",desc:"Egypt grows dates alongside 5,000 years of history! Pharaohs packed them in tombs for the afterlife. Medjool dates are the most prized — caramel-soft, rich and divine!",season:"Sep–Nov",tags:["5000yr tomb art","Pharaoh's afterlife food","Caramel-soft","Ancient sacred"]},
+    {name:"Guava",emoji:"🍏",bg:"#4da64d",sweet:65,acid:40,bitter:15,vitC:228,fun:"🌅 Egyptian guava from the Nile Delta is considered the finest in the Middle East! The cool Nile nights and warm Delta days create an extraordinary flavour combination.",desc:"Egypt's Nile Delta guavas are the most prized in the Middle East! The unique climate creates outstanding flavour. Pink-fleshed, incredibly aromatic, Vitamin C powerhouses!",season:"Aug–Nov",tags:["Nile Delta finest","Middle East fame","4x Vit C of orange","Pink-fleshed"]},
+    {name:"Balah (Khalal Date)",emoji:"🟡",bg:"#e8b820",sweet:65,acid:20,bitter:25,vitC:1,fun:"🤚 Khalal dates are eaten in the crunchy UNRIPE stage — crispy like an apple with a unique astringent-sweet flavour! Most Western people have never tasted dates at this stage!",desc:"Unripe dates eaten crunchy — most of the world never tastes dates at this golden stage! Crispy, mildly sweet with a slight astringent tang. An Egyptian autumn treat!",season:"Aug–Sep",tags:["Eaten unripe!","Crunchy dates","Unknown to most","Autumn Egyptian treat"]},
+    {name:"Prickly Pear",emoji:"🟣",bg:"#9b3090",sweet:68,acid:30,bitter:12,vitC:14,fun:"🌵 Egyptian street vendors peel prickly pears with lightning speed using two small knives! They've mastered the art of removing the spiny skin in about 3 seconds flat.",desc:"Sold by Egyptian street vendors who peel them with lightning speed! The sweet seedy flesh comes in red, orange and yellow. A summer essential on every Egyptian street corner!",season:"Jul–Oct",tags:["3-second peeling!","Street corner hero","Summer essential","Three colours"]},
+  ]},
+  144:{ name:"Sri Lanka",flag:"🇱🇰", fruits:[
+    {name:"King Coconut",emoji:"🥥",bg:"#f08820",sweet:50,acid:10,bitter:5,vitC:3,fun:"👑 King Coconuts are ONLY found in Sri Lanka — they grow nowhere else on Earth! The orange shell and uniquely sweet-saline water make them completely distinct from regular coconuts.",desc:"Found ONLY in Sri Lanka! Orange-shelled coconuts with water that's more electrolyte-rich than sports drinks! Used for rehydration in hospitals. Sri Lanka's most unique treasure!",season:"Year-round",tags:["Sri Lanka exclusive!","Orange shell","Better than sports drinks","Hospital rehydration"]},
+    {name:"Wood Apple (Beli)",emoji:"🟤",bg:"#8b5030",sweet:50,acid:40,bitter:40,vitC:9,fun:"🕉️ Wood apple is SACRED to the Hindu god Shiva — the leaves are placed on Shiva altars and the fruit is offered in temples daily! It's been used in religion for 5,000 years.",desc:"A rock-hard brown fruit sacred to Shiva — worshipped for 5,000 years in Sri Lanka and India! The aromatic brown flesh inside is scooped out and mixed with jaggery and coconut!",season:"Mar–May",tags:["Sacred to Shiva","5000yr worship","Rock-hard shell","Jaggery mixed"]},
+    {name:"Rambutan",emoji:"🔴",bg:"#c0392b",sweet:70,acid:28,bitter:8,vitC:66,fun:"🌿 Sri Lankan rambutan farms in Kurunegala district produce unique varieties with red-white spotted skins! Local farmers have been developing distinct varieties for generations.",desc:"Sri Lanka's Kurunegala district grows extraordinary rambutan varieties! Some have red-and-white spotted skins completely unique to this island. Sweet, juicy, totally alien!",season:"Jun–Sep",tags:["Spotted skin varieties","Kurunegala district","Island-unique","Generational farming"]},
+    {name:"Mangosteen",emoji:"💜",bg:"#6b2090",sweet:76,acid:40,bitter:18,vitC:3,fun:"🌊 Sri Lanka's southern coast — warmed by the Indian Ocean and sheltered by mountains — creates the perfect micro-climate for mangosteen. The fruits here are considered the best on the island.",desc:"Sri Lanka's coastal mangosteen grows in near-perfect conditions by the Indian Ocean! The Queen of Fruits at her absolute finest — floral, sweet and perfectly balanced!",season:"May–Jul",tags:["Indian Ocean grown","Queen of fruits","Mountain-sheltered","Island finest"]},
+    {name:"Jak Fruit (Varaka)",emoji:"🟡",bg:"#d4a017",sweet:72,acid:18,bitter:8,vitC:14,fun:"🌳 Sri Lankans eat jackfruit in EVERY POSSIBLE STAGE — unripe as curry, half-ripe as chips, ripe as dessert, and the seeds roasted like chestnuts! Nothing is wasted!",desc:"Sri Lanka uses jackfruit in every possible way — from unripe curry to ripe sweet dessert to roasted seeds! The most versatile tree in Sri Lankan cooking. Zero waste!",season:"Mar–Jun",tags:["Zero waste fruit","Every stage eaten","Seed roasted","Curry to dessert"]},
+  ]},
+  124:{ name:"Canada",flag:"🇨🇦", fruits:[
+    {name:"Saskatoon Berry",emoji:"🫐",bg:"#5030a0",sweet:68,acid:30,bitter:15,vitC:5,fun:"🦬 Saskatoon berries were THE most important food of the Plains Indigenous peoples — mixed with buffalo meat and fat to make pemmican, the original energy bar for long winter journeys!",desc:"Canada's native prairie berry — sweet, nutty, almost almond-like! The most important food of plains Indigenous peoples, mixed into pemmican (the original protein bar) for centuries!",season:"Jun–Jul",tags:["Original energy bar!","Plains Indigenous","Pemmican ingredient","Almond-sweet"]},
+    {name:"Wild Blueberry",emoji:"🫐",bg:"#3a5fa0",sweet:65,acid:40,bitter:12,vitC:16,fun:"🌲 Nova Scotia's wild blueberries are smaller AND more flavourful than cultivated ones! They've grown wild since the last ice age and Indigenous peoples have been eating them for 13,000 years!",desc:"Canadian wild blueberries are smaller, darker and MORE flavourful than farmed ones! Native to Nova Scotia since the Ice Age. Indigenous peoples have loved them for 13,000 years!",season:"Jul–Aug",tags:["Ice Age native","13000yr tradition","More flavour than farmed","Nova Scotia fame"]},
+    {name:"Haskap Berry",emoji:"🔵",bg:"#2830a0",sweet:55,acid:68,bitter:22,vitC:60,fun:"🐻 'Haskap' means 'little present at the end of a branch' in Ainu (Indigenous Japanese)! The berries were also loved in Siberia and grew all the way across the Arctic!",desc:"An elongated blue berry nicknamed 'the taste of blueberry meets raspberry!' Growing wild from Canada to Japan across the Arctic. The name means 'little present on a branch'!",season:"Jun–Jul",tags:["Arctic berry","Blueberry+raspberry taste","Ainu name","Little present"]},
+    {name:"Sea Buckthorn",emoji:"🟠",bg:"#e07820",sweet:12,acid:90,bitter:25,vitC:695,fun:"☀️ Sea buckthorn berries release a vivid BRIGHT ORANGE juice that stains everything! Indigenous peoples used the juice as paint and dye — a natural orange food colour!",desc:"Electric sour orange berries growing on Canada's prairies and coasts! 12× more vitamin C than oranges! Used as orange dye by Indigenous peoples. The most sour berry in Canada!",season:"Aug–Sep",tags:["12x Vit C","Natural orange dye","Stains everything!","Prairie sour bomb"]},
+    {name:"Cloudberry",emoji:"🟡",bg:"#f0c030",sweet:60,acid:50,bitter:15,vitC:158,fun:"👸 Cloudberries are called 'the gold of the Arctic'! In Scandinavia and northern Canada they're so rare and prized that they're reserved for royalty and special celebrations. Pure gold!",desc:"Rare golden berries growing in Arctic bogs — called 'Gold of the Arctic'! Taste like raspberries with a hint of apple. So rare they're served at royal banquets in Scandinavia!",season:"Jul–Aug",tags:["Arctic gold","Royal banquets","Super rare","Raspberry-apple taste"]},
+  ]},
+  643:{ name:"Russia",flag:"🇷🇺", fruits:[
+    {name:"Sea Buckthorn",emoji:"🟠",bg:"#e08020",sweet:12,acid:90,bitter:28,vitC:695,fun:"🚀 Soviet cosmonauts took sea buckthorn OIL to space! It protects skin from radiation and was applied before spacewalks. The berry literally went to orbit!",desc:"Russia's super-sour orange power berry! Soviet cosmonauts applied sea buckthorn oil before spacewalks for radiation protection. 12× more vitamin C than oranges!",season:"Aug–Sep",tags:["Went to SPACE!","Cosmonaut oil","12x Vit C","Radiation shield"]},
+    {name:"Lingonberry",emoji:"🔴",bg:"#c02830",sweet:30,acid:72,bitter:30,vitC:15,fun:"❄️ Lingonberries survive -50°C Siberian winters by hiding under snow! The leaves stay green all winter protected by a snow blanket — nature's ultimate cold-weather survivor.",desc:"Russia's beloved red forest berry — surviving -50°C Siberia under snowdrifts! Made into preserves that last all winter. A staple of Russian forest foraging for centuries!",season:"Aug–Sep",tags:["Survives -50°C","Siberian survivor","Winter preserve","Forest foraging"]},
+    {name:"Black Currant",emoji:"🫐",bg:"#302060",sweet:40,acid:72,bitter:40,vitC:181,fun:"🫖 Black currant tea (smorodina) is Russia's national hot drink in winter! And interestingly, black currants were BANNED in the USA until 2003 because they spread a tree disease!",desc:"Russia's national berry! The base of kvass, jam and smorodina tea. Famously banned in the USA for nearly a century! An extraordinary vitamin C source — 3× more than oranges!",season:"Jul–Aug",tags:["Banned in USA until 2003!","National Russian berry","Winter kvass","3x Vit C"]},
+    {name:"Cloudberry",emoji:"🟡",bg:"#f0c030",sweet:60,acid:48,bitter:14,vitC:158,fun:"☃️ Russian and Siberian peoples preserve cloudberries without ANY sugar! The berries are so acidic they naturally preserve themselves in jars of cold water — nature's own vinegar!",desc:"Golden Arctic cloudberries growing in Siberia's vast taiga! So acidic they self-preserve without sugar! Called 'malorosinka' — little dew — in Russian poetry for their dewdrop glow.",season:"Jul–Aug",tags:["Self-preserving!","Siberian poetry","No sugar needed","Dewdrop gold"]},
+    {name:"Wild Strawberry",emoji:"🍓",bg:"#e83050",sweet:72,acid:40,bitter:8,vitC:62,fun:"🌲 Wild Russian forest strawberries are FIVE TIMES smaller than farmed ones but Russian foragers insist they have five times the flavour! Forest kids eat them all summer.",desc:"Tiny Russian forest strawberries — just 1cm wide but bursting with flavour that puts garden strawberries to shame! A summer foraging ritual for Russian families for generations!",season:"Jun–Jul",tags:["5× more flavour!","Tiny forest gem","Family foraging ritual","Summer woods magic"]},
+  ]},
+  364:{ name:"Iran",flag:"🇮🇷", fruits:[
+    {name:"Pomegranate",emoji:"🔴",bg:"#c01828",sweet:58,acid:52,bitter:22,vitC:10,fun:"🏺 Iran is the BIRTHPLACE of the pomegranate! It's been cultivated here for 4,000+ years. The ancient Persian paradise gardens (pairi-daeza) were described as filled with pomegranate trees.",desc:"Iran is the ancestral home of all pomegranates! Cultivated here for 4,000+ years in ancient 'paradise gardens' — the very word 'paradise' comes from Persian gardens full of pomegranate!",season:"Sep–Nov",tags:["Pomegranate birthplace","4000yr history","Paradise garden fruit","Word-origin story"]},
+    {name:"Sour Cherry (Albaloo)",emoji:"🍒",bg:"#c02030",sweet:35,acid:85,bitter:18,vitC:16,fun:"🍹 Albaloo sharbat (sour cherry drink) has been drunk in Iran since MEDIEVAL TIMES and is mentioned in 11th-century Persian poetry! It's been cooled with snow from mountains for centuries.",desc:"Iran's beloved sour cherry! Made into sharbat (sherbet) drunk since medieval times — cooled with mountain snow! The word 'sherbet' actually comes from Persian 'sharbat'!",season:"Jun–Jul",tags:["Sherbet origin!","Medieval Persian drink","Mountain snow cooled","11th century poetry"]},
+    {name:"Barberry (Zereshk)",emoji:"🔴",bg:"#d04020",sweet:5,acid:95,bitter:30,vitC:35,fun:"🍚 Zereshk polo (barberry rice) is the MOST FAMOUS rice dish in Iranian cooking! The tiny sour red berries are scattered through saffron rice — 100% mandatory at Persian weddings!",desc:"Tiny sour-electric red berries that are Iran's most iconic cooking ingredient! Scattered through saffron rice at every Persian wedding and celebration. The most prized Persian spice-fruit!",season:"Aug–Sep",tags:["Wedding essential","Zereshk polo","Saffron rice partner","Persian icon"]},
+    {name:"Quince",emoji:"🍐",bg:"#e8c030",sweet:28,acid:42,bitter:38,vitC:15,fun:"🌹 Iran grows over 50 unique quince varieties — more than anywhere on Earth! Some are sweet enough to eat raw, unlike the hard astringent quinces found elsewhere!",desc:"Iran grows 50+ quince varieties — the world's greatest quince collection! Some Iranian varieties are sweet enough to eat raw, surprising anyone who's only tasted the hard European type!",season:"Sep–Nov",tags:["50+ varieties!","Sweet enough raw","World's richest quince","Golden perfumed"]},
+    {name:"Melon (Gurme)",emoji:"🍈",bg:"#80c840",sweet:88,acid:8,bitter:5,vitC:18,fun:"🚂 Marco Polo wrote that he had never eaten melons as sweet as those from Persia (Iran)! Iranian melons were so prized they were shipped by horse and later train to the Russian tsar!",desc:"Persian melons are legendary — Marco Polo wrote about their extraordinary sweetness! Sent as royal gifts to Russian tsars. Iran's desert climate creates the sweetest melons on Earth!",season:"Jun–Sep",tags:["Marco Polo praised!","Sent to Russian tsar","Desert-sweet","Marco Polo approved"]},
+  ]},
+  152:{ name:"Chile",flag:"🇨🇱", fruits:[
+    {name:"Lucuma",emoji:"🟡",bg:"#d4a830",sweet:78,acid:12,bitter:12,vitC:2,fun:"🗿 Lucuma appears in ancient Incan and Moche ceramics as a DEITY! It's depicted in 2,000-year-old artwork from northern Chile as a sacred life-giving force.",desc:"Chile's golden ancient fruit — depicted as a deity in 2,000-year-old Moche art! Sweet like maple syrup and sweet potato mixed. Chile's most prized native flavour!",season:"Apr–Jul",tags:["Ancient deity fruit","2000yr Moche art","Maple-sweet potato","Sacred Andean"]},
+    {name:"Murtilla",emoji:"🔴",bg:"#c03060",sweet:55,acid:55,bitter:20,vitC:50,fun:"🐆 Murtilla is sometimes called the 'Chilean cranberry'! It's been eaten by the Mapuche people for thousands of years — and it's SO cold-resistant it grows near Antarctic patagonia!",desc:"Chile's wild 'Chilean cranberry'! Beloved by the Mapuche people for thousands of years. Grows near Patagonia's icy winds — one of the world's most cold-resistant berries!",season:"Jan–Apr",tags:["Chilean cranberry","Mapuche tradition","Near Antarctic!","Cold-resistant champion"]},
+    {name:"Cherimoya",emoji:"💚",bg:"#3a9a3a",sweet:88,acid:18,bitter:8,vitC:13,fun:"🌋 Chile's Andean foothills produce cherimoyas beloved across South America! Mark Twain called it the most delicious fruit known to man — after eating one from Hawaii (grown from Chilean/Peruvian stock)!",desc:"Chile's valley cherimoyas are South America's most celebrated! Creamy, vanilla-custard flesh inside a scaly green skin. Mark Twain declared it the world's most delicious fruit!",season:"Jun–Oct",tags:["Mark Twain's dream","Vanilla custard","Andean foothills","Scaly green exterior"]},
+    {name:"Papayas (Chilean)",emoji:"🟠",bg:"#f07828",sweet:75,acid:25,bitter:10,vitC:62,fun:"🏜️ Chile's Atacama Desert region (the driest desert on Earth!) grows papayas that are impossibly sweet because the extreme sun and minimal rainfall concentrate all the sugars!",desc:"Papayas from the world's driest desert — the Atacama! The extreme sun and minimal rain concentrate sugars to an extraordinary level. The sweetest papaya outside of the tropics!",season:"Nov–Mar",tags:["Atacama Desert grown","Driest desert on Earth","Concentrated sweet","Impossible desert fruit"]},
+  ]},
+  32:{ name:"Argentina",flag:"🇦🇷", fruits:[
+    {name:"Malbec Grape",emoji:"🍇",bg:"#6a1a6a",sweet:75,acid:35,bitter:25,vitC:4,fun:"🗻 Mendoza grapes grow at 1,000m altitude in the shadow of the Andes! The extreme UV radiation at high altitude gives the grape skins extraordinary tannin thickness and flavour depth.",desc:"Mendoza's world-famous wine grape grown at Andean altitudes! The thin air and extreme UV create unmatched grape skins. Argentina makes the world's most celebrated Malbec wine!",season:"Mar–Apr",tags:["Andean altitude","Extreme UV skin","World's best Malbec","Andes shadow"]},
+    {name:"Quince (Membrillo)",emoji:"🍐",bg:"#e8c030",sweet:28,acid:42,bitter:38,vitC:15,fun:"🫙 Dulce de membrillo (quince paste) is eaten with cheese at EVERY Argentine meal! It's spread on virtually every breakfast table and sold in every Argentine supermarket — a national obsession.",desc:"Argentina's national paste — 'dulce de membrillo'! Eaten with cheese at breakfast, lunch and dinner across the country. Quince paste is Argentina's most beloved condiment!",season:"Apr–Jun",tags:["National condiment","Eaten at every meal","Cheese partner","Argentine obsession"]},
+    {name:"Boysenberry",emoji:"🟣",bg:"#5a2080",sweet:62,acid:58,bitter:18,vitC:19,fun:"🏔️ Argentina's Patagonian valleys produce extraordinary boysenberries in the shadow of the Andes! The cool alpine climate creates a flavour intensity that South American chefs treasure.",desc:"Patagonian boysenberries from the Andes foothills! The cool alpine valleys create an intense flavour that Argentina's chefs use in everything from alfajores to ice cream!",season:"Nov–Jan",tags:["Patagonian pride","Alpine flavour","Alfajores partner","Chef's treasure"]},
+    {name:"Argentine Peach",emoji:"🍑",bg:"#f4a070",sweet:75,acid:28,bitter:8,vitC:10,fun:"🌞 Mendoza's peaches grow in orchards with a view of the Andes snow-peaks! The hot sunny days and cold nights of Mendoza create a sweetness intensity that's hard to beat.",desc:"Mendoza's sun-kissed peaches ripen with the Andes as a backdrop! The same hot days + cold nights that make great wine grapes also make extraordinary peaches. Juicy perfection!",season:"Dec–Feb",tags:["Andes backdrop","Hot day cold night","Mendoza orchards","Juicy perfection"]},
+  ]},
+  188:{ name:"Costa Rica",flag:"🇨🇷", fruits:[
+    {name:"Cas Guava",emoji:"🟡",bg:"#e8d030",sweet:38,acid:85,bitter:20,vitC:80,fun:"🌈 Cas is one of the MOST sour fruits Costa Ricans eat — and they eat it obsessively! Cas agua (cas fruit drink) is drunk at every meal in Costa Rica. It's THAT loved.",desc:"Costa Rica's sourerest beloved fruit! A small tart guava variety so sour it makes your eyes water — but Costa Ricans make the most refreshing national drink from it!",season:"Year-round",tags:["Costa Rica's sourest","National drink","Face-puckering love","Obsessive favourite"]},
+    {name:"Maracuyá (Passion Fruit)",emoji:"💜",bg:"#7e2d8e",sweet:55,acid:80,bitter:12,vitC:30,fun:"🌺 Costa Rica's yellow passion fruit variety (maracuyá) is larger and sweeter than the purple variety! Costa Ricans add it to everything — sodas, desserts, marinades and ceviche!",desc:"The yellow passion fruit beloved across Costa Rica! Larger and sweeter than purple passion fruit. Added to virtually everything Costa Rican — sodas, ceviche, ice cream!",season:"Year-round",tags:["Yellow variety","Sweeter than purple","In everything!","Ceviche partner"]},
+    {name:"Nance",emoji:"🟡",bg:"#e0a020",sweet:45,acid:60,bitter:30,vitC:80,fun:"🤢 Nance has a VERY distinctive smell that divides Costa Ricans! Half the country says it smells like cheese or feet — the other half says it's the best tropical fragrance ever!",desc:"A small yellow berry with the most controversial smell in Central America! Half the people love it, half recoil! Fermented into chicha (a traditional drink) for thousands of years.",season:"Jul–Sep",tags:["Most controversial smell","Cheese or tropical?","Chicha fermented","Divides the nation"]},
+    {name:"Guanábana",emoji:"💚",bg:"#3a8a3a",sweet:70,acid:45,bitter:15,vitC:21,fun:"🍹 Guanábana refrescos are sold on every Costa Rican street corner! The thick white pulp blended with water and sugar makes the creamiest, most refreshing tropical drink imaginable.",desc:"Costa Rica's favourite tropical giant! The spiny green fruit with cottony white inside makes the creamiest, most refreshing drinks. Every street corner has a guanábana refrescos stand!",season:"Year-round",tags:["Every street corner drink","Spiny giant","Creamy white inside","National refreshment"]},
+    {name:"Jocote",emoji:"🔴",bg:"#d03020",sweet:50,acid:65,bitter:20,vitC:45,fun:"🧂 Jocote is eaten with SALT in Costa Rica! Children eat unripe green jocotes with salt as a sour snack — it's a childhood rite of passage and a school snack tradition!",desc:"Small red plum-like fruits eaten by Costa Rican schoolchildren with salt! Green unripe ones with salt is the classic childhood snack. A beloved childhood memory for every Costa Rican!",season:"Aug–Nov",tags:["Salt snack tradition","Kids' childhood memory","Sour with salt","School snack legend"]},
+  ]},
+  231:{ name:"Ethiopia",flag:"🇪🇹", fruits:[
+    {name:"Coffee Cherry",emoji:"🍒",bg:"#7a2010",sweet:45,acid:30,bitter:40,vitC:5,fun:"☕ Coffee was DISCOVERED in Ethiopia by a goat herder named Kaldi who noticed his goats dancing energetically after eating red berries! The legend of coffee begins right here!",desc:"The original fruit behind the world's most popular drink! A sweet red cherry — the coffee bean is the seed inside! Ethiopia is the birthplace of all coffee. The whole world owes this fruit!",season:"Oct–Dec",tags:["Discovered by goats!","Birthplace of coffee","World's most important fruit?","Kaldi's goats"]},
+    {name:"Gesho (African Hop)",emoji:"🟢",bg:"#3a7030",sweet:5,acid:20,bitter:90,vitC:3,fun:"🍺 Gesho is Ethiopia's brewing secret ingredient! It's added to tej (honey wine) and local beers to give them their distinctive bitter herbal edge. The hops of East Africa!",desc:"The 'Ethiopian hops'! A bitter berry used to brew tej (honey wine) — Ethiopia's national drink for thousands of years! Without gesho, tej simply isn't tej. The soul of Ethiopian brewing!",season:"Year-round",tags:["Ethiopian hops","Tej brewing secret","Honey wine essential","3000yr brewing"]},
+    {name:"Wanza (Cordia) Berry",emoji:"🟡",bg:"#d4b030",sweet:60,acid:30,bitter:20,vitC:15,fun:"🐘 Wanza trees are loved by African elephants who travel specifically to eat the small fruits! Ethiopian communities protect wanza trees because wherever the tree grows, elephants visit!",desc:"A golden berry from the wanza tree — prized by elephants and humans alike! Ethiopian communities protect these trees knowing elephants will visit. Sweet, sticky, beloved by wildlife!",season:"May–Jul",tags:["Elephant favourite","Community protected","Golden sticky","Wildlife tree"]},
+    {name:"Avocado",emoji:"🥑",bg:"#2d5a1b",sweet:15,acid:10,bitter:15,vitC:10,fun:"🌿 Ethiopians eat avocados in a TOTALLY unique way — blended into a sweet layered dessert called 'spris'! Avocado, mango, guava and papaya are layered in a glass with juice!",desc:"Ethiopia has a completely unique avocado tradition — blended into 'spris', the most famous Ethiopian street dessert! Layers of avocado, mango and papaya in a beautiful glass!",season:"Year-round",tags:["Spris dessert tradition","Layers of fruit","Sweet not savoury","Ethiopian unique use"]},
+    {name:"Papaya",emoji:"🧡",bg:"#f07830",sweet:72,acid:22,bitter:8,vitC:62,fun:"🌅 Ethiopian papaya is squeezed into spris — the iconic layered street fruit drink — alongside avocado and mango! Ethiopia's morning street food market culture revolves around this drink!",desc:"Ethiopia's papaya is the star of 'spris' — the incredible layered street drink of Addis Ababa! Markets begin each morning with the sound of papayas being blended into the national breakfast!",season:"Year-round",tags:["Spris star","Morning market ritual","Addis Ababa icon","Breakfast drink"]},
   ]},
 };
 
-// Country centroid labels for the pulse markers
+// ─── COUNTRY CENTROIDS ───────────────────────────────────────────────────────
 const CENTROIDS = {
-  76:[-52,-10], 840:[-100,40], 484:[-102,24], 356:[80,22],
-  764:[101,15], 392:[138,36], 380:[12,42], 156:[105,35],
-  36:[134,-26], 710:[25,-29], 604:[-76,-10], 360:[118,-2],
-  566:[8,10], 170:[-74,4], 792:[35,39], 724:[-3,40],
+  76:[-52,-10],840:[-100,40],484:[-102,24],356:[80,22],764:[101,15],
+  392:[138,36],380:[12,42],156:[105,35],36:[134,-26],710:[25,-29],
+  604:[-76,-10],360:[118,-2],566:[8,10],170:[-74,4],792:[35,39],
+  724:[-3,40],250:[2,46],504:[-5,32],404:[38,0],608:[122,12],
+  704:[106,16],458:[110,4],410:[128,36],554:[172,-42],388:[-77,18],
+  300:[22,39],276:[10,51],818:[30,27],144:[81,8],124:[-96,60],
+  643:[90,62],364:[53,33],152:[-71,-35],32:[-65,-35],188:[-84,10],
+  231:[40,8]
 };
 
-// ─── D3 MAP SETUP ───────────────────────────────────────────────────────────
-const svg = d3.select("#world-map");
-const wrap = document.getElementById("map-wrap");
+// ─── PALETTE for fruit cards ──────────────────────────────────────────────────
+const PALETTES = [
+  "#ffe8f0","#fff0e0","#e8ffe8","#e8f0ff","#fff8e0","#f0e8ff",
+  "#e0fff8","#ffe0e8","#f8ffe0","#e8ffff"
+];
 
-function dims(){ return { w: wrap.clientWidth, h: wrap.clientHeight }; }
+// ─── D3 MAP ───────────────────────────────────────────────────────────────────
+const mapSvg = d3.select("#world-map");
+const mapWrap = document.getElementById("map-wrap");
 
-let projection, path, zoom, gCountries, gMarkers;
+let projection, geoPath, gCountries, gMarkers;
 
-function buildMap(world) {
-  svg.selectAll("*").remove();
-  const { w, h } = dims();
+function buildMap(world){
+  mapSvg.selectAll("*").remove();
+  const W = mapWrap.clientWidth, H = mapWrap.clientHeight;
+  const sc = Math.min(W/6.0, H/3.0);
 
-  projection = d3.geoNaturalEarth1()
-    .scale(w / 6.2)
-    .translate([w / 2, h / 2]);
+  projection = d3.geoNaturalEarth1().scale(sc).translate([W/2, H/2]);
+  geoPath = d3.geoPath().projection(projection);
 
-  path = d3.geoPath().projection(projection);
-  zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+  // Defs
+  const defs = mapSvg.append("defs");
+  const og = defs.append("radialGradient").attr("id","oceanGrad").attr("cx","50%").attr("cy","50%").attr("r","50%");
+  og.append("stop").attr("offset","0%").attr("stop-color","#7ad4f0");
+  og.append("stop").attr("offset","100%").attr("stop-color","#4aa8d8");
 
-  // Sphere (ocean)
-  svg.append("g").attr("class","sphere-g").append("path")
-    .datum({type:"Sphere"})
-    .attr("class","sphere")
-    .attr("d", path);
+  // Ocean
+  mapSvg.append("path").datum({type:"Sphere"})
+    .attr("d",geoPath).attr("fill","url(#oceanGrad)");
 
   // Graticule
-  svg.append("g").attr("class","grat-g").append("path")
-    .datum(d3.geoGraticule()())
-    .attr("class","graticule")
-    .attr("d", path);
+  mapSvg.append("path").datum(d3.geoGraticule()())
+    .attr("fill","none").attr("stroke","rgba(255,255,255,0.2)").attr("stroke-width",.4)
+    .attr("d",geoPath);
 
   // Countries
-  gCountries = svg.append("g").attr("class","countries-g");
+  gCountries = mapSvg.append("g");
   const countries = topojson.feature(world, world.objects.countries);
   gCountries.selectAll(".country")
     .data(countries.features)
     .join("path")
-    .attr("class", d => {
-      const id = +d.id;
-      return "country" + (DATA[id] ? " has-data" : "");
+    .attr("class",d=>{
+      const id=+d.id;
+      return "country"+(DATA[id]?" has-data":"");
     })
-    .attr("d", path)
-    .on("mouseover", mouseOver)
-    .on("mousemove", mouseMove)
-    .on("mouseout", mouseOut)
-    .on("click", clickCountry);
+    .attr("d",geoPath)
+    .on("pointerover",pointerOver)
+    .on("pointermove",pointerMove)
+    .on("pointerout",pointerOut)
+    .on("pointerdown",pointerDown);
 
   // Pulse markers
-  gMarkers = svg.append("g").attr("class","markers-g");
-  for (const [id, coords] of Object.entries(CENTROIDS)) {
-    const [lon, lat] = coords;
-    const [x, y] = projection([lon, lat]);
-    const g = gMarkers.append("g")
+  gMarkers = mapSvg.append("g");
+  for(const [id,[lon,lat]] of Object.entries(CENTROIDS)){
+    const [x,y] = projection([lon,lat]);
+    if(!x||!y||x<0||y<0||x>W||y>H) continue;
+    const g = gMarkers.append("g").attr("transform",`translate(${x},${y})`)
       .attr("class","pulse-dot")
-      .attr("transform", `translate(${x},${y})`)
-      .style("cursor","pointer")
-      .on("click", () => openCountry(+id));
-    g.append("circle").attr("class","pulse-ring").attr("r",4);
-    g.append("circle").attr("class","pulse-circle").attr("r",3)
-      .style("animation-delay", Math.random()*2 + "s");
+      .on("pointerdown",e=>{e.stopPropagation();openCountry(+id)});
+    g.append("circle").attr("class","p-ring").attr("r",4)
+      .style("animation-delay", (Math.random()*2)+"s");
+    g.append("circle").attr("class","p-dot").attr("r",3.5);
   }
-
-  svg.call(zoom);
 }
 
-function zoomed(event) {
-  gCountries.attr("transform", event.transform);
-  gMarkers.attr("transform", event.transform);
-  svg.select(".sphere-g path").attr("d", path);
-  svg.select(".grat-g path").attr("d", path);
-}
+// Prevent all native touch scrolling/zooming on the SVG
+document.getElementById("world-map").addEventListener("touchstart",e=>e.preventDefault(),{passive:false});
+document.getElementById("world-map").addEventListener("touchmove",e=>e.preventDefault(),{passive:false});
 
-// ─── INTERACTIONS ───────────────────────────────────────────────────────────
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
 const tip = document.getElementById("tip");
-let currentCountry = null;
+let currentID = null;
 
-function mouseOver(event, d) {
-  const id = +d.id;
-  const name = DATA[id]?.name || "—";
-  if (DATA[id]) {
-    tip.style.opacity = "1";
-    tip.textContent = `${DATA[id].flag} ${name}  ·  ${DATA[id].fruits.length} fruits`;
-  } else {
-    tip.style.opacity = "1";
-    tip.textContent = name !== "—" ? name : "Unknown country";
-    tip.style.color = "var(--muted)";
-  }
-  if (DATA[id]) tip.style.color = "var(--gold)";
+function pointerOver(event,d){
+  const id=+d.id;
+  if(!DATA[id]) return;
+  tip.style.opacity="1";
+  tip.textContent=`${DATA[id].flag} ${DATA[id].name}  ✨  ${DATA[id].fruits.length} fruits`;
 }
-
-function mouseMove(event) {
-  tip.style.left = (event.clientX + 14) + "px";
-  tip.style.top = (event.clientY - 28) + "px";
+function pointerMove(event){
+  tip.style.left=(event.clientX+14)+"px";
+  tip.style.top=(event.clientY-32)+"px";
 }
-
-function mouseOut() {
-  tip.style.opacity = "0";
-  tip.style.color = "var(--gold)";
-}
-
-function clickCountry(event, d) {
-  const id = +d.id;
-  if (!DATA[id]) return;
+function pointerOut(){tip.style.opacity="0"}
+function pointerDown(event,d){
+  const id=+d.id;
+  if(!DATA[id]) return;
   openCountry(id);
 }
 
-function openCountry(id) {
-  const data = DATA[id];
-  if (!data) return;
-  if (currentCountry === id) return;
-  currentCountry = id;
+function openCountry(id){
+  const data=DATA[id];
+  if(!data) return;
+  currentID=id;
 
-  // Deselect all, select clicked
-  gCountries.selectAll(".country").classed("selected", false);
-  gCountries.selectAll(".country").filter(dd => +dd.id === id).classed("selected", true);
+  // Highlight
+  gCountries.selectAll(".country").classed("selected",false);
+  gCountries.selectAll(".country").filter(d=>+d.id===id).classed("selected",true);
 
-  // Panel header
-  document.getElementById("cname").textContent = data.flag + " " + data.name;
-  document.getElementById("csub").textContent = `${data.fruits.length} native & beloved fruits`;
+  const isMobile = window.innerWidth <= 700;
+  if(isMobile) openMobileSheet(data);
+  else openDesktopPanel(data);
 
-  // Fruit grid
-  const grid = document.getElementById("fgrid");
-  grid.innerHTML = "";
-  data.fruits.forEach((f, i) => {
+  document.getElementById("hint").style.opacity="0";
+}
+
+function populateFruitGrid(containerId, detailId, data){
+  const grid = document.getElementById(containerId);
+  grid.innerHTML="";
+  data.fruits.forEach((f,i)=>{
     const card = document.createElement("div");
-    card.className = "fc";
-    card.innerHTML = `<span class="fe">${f.emoji}</span><span class="fn">${f.name}</span>`;
-    card.addEventListener("click", () => {
-      grid.querySelectorAll(".fc").forEach(c => c.classList.remove("sel"));
+    card.className="fruit-card";
+    card.style.background=PALETTES[i%PALETTES.length];
+    card.innerHTML=`
+      <span class="fc-emoji">${f.emoji}</span>
+      <div class="fc-blush-l"></div>
+      <div class="fc-blush-r"></div>
+      <span class="fc-name">${f.name}</span>
+      <span class="fc-sparkle">✨</span>
+    `;
+    card.addEventListener("pointerdown",()=>{
+      grid.querySelectorAll(".fruit-card").forEach(c=>c.classList.remove("sel"));
       card.classList.add("sel");
-      renderDetail(f);
+      renderDetail(detailId, f);
     });
     grid.appendChild(card);
   });
-
-  // Open panel
-  const panel = document.getElementById("panel");
-  panel.classList.add("open");
-
-  // Clear detail, show first fruit
-  document.getElementById("detail").innerHTML = `<div class="empty-state"><div class="big">🍉</div><div>Pick a fruit above<br>to see its secrets!</div></div>`;
-
-  // Auto-select first
-  setTimeout(() => {
-    const first = grid.querySelector(".fc");
-    if (first) first.click();
-  }, 200);
-
-  // Hide hint
-  document.getElementById("hint").style.opacity = "0";
 }
 
-function renderDetail(f) {
-  const d = document.getElementById("detail");
-  const maxVitC = 5300; // Kakadu max
-  const vitCPct = Math.min(100, (f.vitC / maxVitC) * 100 + 8);
-  const calPct = Math.min(100, (f.cal / 250) * 100);
+function openDesktopPanel(data){
+  document.getElementById("panel-flag").textContent=data.flag;
+  document.getElementById("panel-name").textContent=data.name;
+  document.getElementById("panel-sub").textContent=`${data.fruits.length} amazing fruits to explore!`;
+  populateFruitGrid("fruit-grid-desktop","detail",data);
+  document.getElementById("panel").classList.add("open");
+  document.getElementById("detail").innerHTML=`<div class="empty-state"><div class="big-emoji">${data.fruits[0]?.emoji||"🍉"}</div><div>Pick a fruit above<br>to see its secrets! ✨</div></div>`;
+  setTimeout(()=>{
+    const first=document.getElementById("fruit-grid-desktop").querySelector(".fruit-card");
+    if(first) first.dispatchEvent(new Event("pointerdown"));
+  },150);
+}
 
-  d.innerHTML = `
-    <div class="dname"><span>${f.emoji}</span>${f.name}</div>
-    <p class="ddesc">${f.desc}</p>
-    <div class="fact-box">${f.fact}</div>
+function openMobileSheet(data){
+  document.getElementById("sheet-flag").textContent=data.flag;
+  document.getElementById("sheet-name").textContent=data.name;
+  document.getElementById("sheet-sub").textContent=`${data.fruits.length} amazing fruits!`;
+  populateFruitGrid("fruit-grid-mobile","detail-mobile",data);
+  document.getElementById("bottom-sheet").classList.add("open");
+  document.getElementById("detail-mobile").innerHTML=`<div class="empty-state"><div class="big-emoji">${data.fruits[0]?.emoji||"🍉"}</div><div>Pick a fruit above<br>to see its secrets! ✨</div></div>`;
+  setTimeout(()=>{
+    const first=document.getElementById("fruit-grid-mobile").querySelector(".fruit-card");
+    if(first) first.dispatchEvent(new Event("pointerdown"));
+  },150);
+}
 
-    <div class="stats-section">
-      <div class="sh3">Flavor Profile</div>
-      ${statRow("Sweetness", f.sweet, getColor(f.sweet, "#f4c430","#c0392b","#5ddc88"), f.sweet+"%")}
-      ${statRow("Acidity", f.acid, getColor(f.acid, "#5ddc80","#f4c430","#ff6b4a"), f.acid+"%")}
-      ${statRow("Bitterness", f.bitter, "#aaa", f.bitter+"%")}
+function renderDetail(containerId, f){
+  const d=document.getElementById(containerId);
+  const maxVitC=5300;
+  const vitCPct=Math.min(100,(f.vitC/maxVitC)*100+5);
+  const calPct=Math.min(100,((f.cal||70)/250)*100);
+
+  d.innerHTML=`
+    <div class="detail-hero">
+      <span class="deco-star">⭐</span>
+      <span class="deco-star">🌟</span>
+      <span class="deco-star">✨</span>
+      <span class="deco-star">💫</span>
+      <div class="hero-emoji-wrap">
+        <span class="hero-emoji">${f.emoji}</span>
+        <div class="hero-blush l"></div>
+        <div class="hero-blush r"></div>
+      </div>
+      <div class="detail-name">${f.name}</div>
+      <p class="detail-desc">${f.desc}</p>
     </div>
 
-    <div class="stats-section" style="margin-top:14px">
-      <div class="sh3">Nutrition (per 100g)</div>
-      ${statRow("Vitamin C", vitCPct, "#5ddcb0", f.vitC+"mg")}
-      ${statRow("Calories", calPct, "#f4b942", f.cal+"kcal")}
-      ${statRow("Water", f.water||75, "#6ab4f0", (f.water||75)+"%")}
-    </div>
+    <div class="fun-fact"><b>🤩 Fun Fact!</b><br>${f.fun}</div>
 
-    <div style="margin-top:14px">
-      <div class="sh3">Season & Tags</div>
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:8px">🗓️ ${f.season}</div>
-      <div class="tags">${f.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-    </div>
+    <div class="season-badge">🗓️ Season: ${f.season}</div>
+
+    <div class="sh3">✨ Taste Profile</div>
+    ${tRow("🍬 Sweetness",f.sweet,barC(f.sweet,"#ffb347","#ff6eb4","#f4e040"),f.sweet+"%")}
+    ${tRow("🍋 Sourness",f.acid,barC(f.acid,"#78e060","#f4e040","#f08040"),f.acid+"%")}
+    ${tRow("🫗 Bitterness",f.bitter,"#c8a0e0",f.bitter+"%")}
+
+    <div class="sh3" style="margin-top:12px">💊 Nutrition (per 100g)</div>
+    ${tRow("Vitamin C",vitCPct,"#5de8b0",f.vitC+"mg")}
+    ${tRow("Calories",calPct,"#ffcc44",(f.cal||"?")+"kcal")}
+    ${tRow("Water",(f.water||75),"#5bc8f0",(f.water||"?")+"% 💧")}
+
+    <div class="tags">${(f.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
   `;
 
   // Animate bars
-  setTimeout(() => {
-    d.querySelectorAll(".sbar").forEach(bar => {
-      const w = bar.dataset.width;
-      bar.style.width = w + "%";
+  setTimeout(()=>{
+    d.querySelectorAll(".taste-bar").forEach(b=>{
+      b.style.width=b.dataset.w+"%";
     });
-  }, 50);
+  },60);
 }
 
-function statRow(label, pct, color, val) {
-  return `
-    <div class="srow">
-      <span class="slabel">${label}</span>
-      <div class="strack"><div class="sbar" data-width="${pct}" style="width:0%;background:${color}"></div></div>
-      <span class="sval">${val}</span>
-    </div>`;
+function tRow(lbl,pct,col,val){
+  return `<div class="taste-row">
+    <span class="taste-label">${lbl}</span>
+    <div class="taste-track"><div class="taste-bar" data-w="${pct}" style="width:0%;background:${col}"></div></div>
+    <span class="taste-val">${val}</span>
+  </div>`;
 }
+function barC(v,lo,mid,hi){ return v<40?lo:v<70?mid:hi; }
 
-function getColor(v, lo, mid, hi) {
-  if (v < 40) return lo;
-  if (v < 70) return mid;
-  return hi;
-}
-
-// Close panel
-document.getElementById("close-btn").addEventListener("click", () => {
+// ─── CLOSE BUTTONS ────────────────────────────────────────────────────────────
+document.getElementById("close-desktop").addEventListener("pointerdown",()=>{
   document.getElementById("panel").classList.remove("open");
-  gCountries.selectAll(".country").classed("selected", false);
-  currentCountry = null;
-  setTimeout(()=>{ document.getElementById("hint").style.opacity="1"; }, 500);
+  gCountries.selectAll(".country").classed("selected",false);
+  currentID=null;
+  setTimeout(()=>document.getElementById("hint").style.opacity="1",400);
+});
+document.getElementById("close-mobile").addEventListener("pointerdown",()=>{
+  document.getElementById("bottom-sheet").classList.remove("open");
+  gCountries.selectAll(".country").classed("selected",false);
+  currentID=null;
+  setTimeout(()=>document.getElementById("hint").style.opacity="1",400);
 });
 
-// Resize
-window.addEventListener("resize", () => { if (window._worldData) buildMap(window._worldData); });
+// ─── RESIZE ───────────────────────────────────────────────────────────────────
+let resizeTimer;
+window.addEventListener("resize",()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{
+    if(window._worldData) buildMap(window._worldData);
+  },200);
+});
 
-// ─── LOAD MAP DATA ──────────────────────────────────────────────────────────
+// ─── LOAD MAP ─────────────────────────────────────────────────────────────────
 fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
-  .then(r => r.json())
-  .then(world => {
-    window._worldData = world;
+  .then(r=>r.json())
+  .then(world=>{
+    window._worldData=world;
     buildMap(world);
   })
-  .catch(err => {
-    document.getElementById("map-wrap").innerHTML =
-      `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-family:'Baloo 2',cursive;font-size:1.2rem;text-align:center;padding:40px">
-        🌍<br><br>Unable to load the world map.<br><span style="font-size:.85rem;font-family:'Nunito',sans-serif">Check your internet connection and reload.<br><br><em>${err}</em></span>
-      </div>`;
+  .catch(err=>{
+    mapWrap.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#c060a0;text-align:center;padding:30px">
+      🌍 Oops! Can't load the map.<br><br>
+      <span style="font-size:.8rem;font-family:'Nunito',sans-serif;color:#9080b0">Check your internet and reload! 💕<br>${err}</span>
+    </div>`;
   });
 </script>
 </body>
