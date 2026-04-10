@@ -855,40 +855,127 @@ function pointerMove(event){
 }
 function pointerOut(){tip.style.opacity="0"}
 function pointerDown(event,d){
-  const id=+d.id;
+  const id = +d.id;
+  const cname = COUNTRY_NAMES[id] || (d.id ? "Country #"+d.id : null);
+  if(!cname) return; // ocean or unknown shape
   if(DATA[id]){
     openCountry(id);
-  } else if(id && id>0){
-    const cname = COUNTRY_NAMES[id] || "This country";
-    openNoData(id, cname);
+  } else {
+    fetchFruitsForCountry(id, cname);
   }
 }
 
-function openNoData(id, cname){
+// ─── AI-POWERED FRUIT GENERATION ─────────────────────────────────────────────
+const AI_CACHE = {}; // don't re-fetch same country
+
+async function fetchFruitsForCountry(id, cname){
+  if(AI_CACHE[id]){ openCountry(id); return; }
+
+  const isMobile = window.innerWidth<=700;
   gCountries.selectAll(".country").classed("selected",false);
   gCountries.selectAll(".country").filter(d=>+d.id===id).classed("selected",true);
-  const isMobile = window.innerWidth<=700;
-  const noDataHTML=`<div class="empty-state" style="padding:20px">
-    <div style="font-size:3rem;animation:spin2 4s ease-in-out infinite">🌱</div>
-    <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--pink);margin-top:8px">${cname}</div>
-    <div style="margin-top:8px;line-height:1.6">Our fruit explorers haven't mapped this country's fruits yet!<br><br>
-    <span style="font-size:.8rem;color:var(--muted)">🌍 We have fruit data for <b>${Object.keys(DATA).length}</b> countries so far — more coming soon! ✨</span></div>
-  </div>`;
   document.getElementById("hint").style.opacity="0";
+
+  // Show loading state
+  const loadingFruits = ["🍎","🍊","🍋","🍇","🍓","🫐","🥭","🍍","🥥","🍑"];
+  const randomFruit = loadingFruits[Math.floor(Math.random()*loadingFruits.length)];
+  const loadHTML = `<div class="empty-state" style="padding:24px">
+    <div style="font-size:3.5rem;animation:spin2 1.2s linear infinite">${randomFruit}</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--pink);margin-top:12px">
+      Discovering ${cname}'s fruits…</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:6px">Our fruit explorer is on the case! ✨</div>
+  </div>`;
+
   if(isMobile){
-    document.getElementById("sheet-flag").textContent="🌱";
+    document.getElementById("sheet-flag").textContent="🔍";
     document.getElementById("sheet-name").textContent=cname;
-    document.getElementById("sheet-sub").textContent="Coming soon to Fruity World!";
+    document.getElementById("sheet-sub").textContent="Loading…";
     document.getElementById("fruit-grid-mobile").innerHTML="";
-    document.getElementById("detail-mobile").innerHTML=noDataHTML;
+    document.getElementById("detail-mobile").innerHTML=loadHTML;
     document.getElementById("bottom-sheet").classList.add("open");
   } else {
-    document.getElementById("panel-flag").textContent="🌱";
+    document.getElementById("panel-flag").textContent="🔍";
     document.getElementById("panel-name").textContent=cname;
-    document.getElementById("panel-sub").textContent="Coming soon to Fruity World!";
+    document.getElementById("panel-sub").textContent="Loading…";
     document.getElementById("fruit-grid-desktop").innerHTML="";
-    document.getElementById("detail").innerHTML=noDataHTML;
+    document.getElementById("detail").innerHTML=loadHTML;
     document.getElementById("panel").classList.add("open");
+  }
+
+  try {
+    const prompt = `You are a fruit encyclopedia for a fun kids' educational game called Fruity World Explorer.
+
+Generate data for 5 interesting fruits that are native to, commonly grown in, or historically significant to ${cname}.
+Include a mix of: native wild fruits, cultivated specialties, and fruits that played an important role in the country's culture/history.
+
+Return ONLY valid JSON (no markdown, no explanation) in this exact format:
+{
+  "flag": "(the emoji flag for ${cname})",
+  "fruits": [
+    {
+      "name": "Fruit Name",
+      "emoji": "(single emoji that best represents this fruit)",
+      "bg": "(a soft pastel hex colour like #ffe8f0)",
+      "sweet": (0-100 sweetness score),
+      "acid": (0-100 sourness score),
+      "bitter": (0-100 bitterness score),
+      "vitC": (vitamin C in mg per 100g, realistic number),
+      "cal": (calories per 100g, realistic number),
+      "water": (water % per 100g, realistic number),
+      "season": "Month range (e.g. Jun–Aug or Year-round)",
+      "desc": "2-3 sentence description of the fruit for curious preteens. Fun and engaging!",
+      "fun": "Start with an emoji then ONE amazing, surprising, or funny fact about this fruit and its connection to ${cname}. Be specific with numbers/stories!",
+      "tags": ["tag1","tag2","tag3","tag4"]
+    }
+  ]
+}
+
+Rules:
+- All 5 fruits must be real and accurate
+- Facts must be genuinely true and interesting
+- Descriptions should be engaging for 10-13 year olds
+- Use varied bg pastel colours: pinks, yellows, greens, blues, purples
+- The emoji should clearly represent the fruit`;
+
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1200,
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+
+    if(!resp.ok) throw new Error("API error "+resp.status);
+    const json = await resp.json();
+    const text = json.content.find(b=>b.type==="text")?.text||"";
+
+    // Parse JSON — strip any accidental markdown fences
+    const clean = text.replace(/```json|```/g,"").trim();
+    const parsed = JSON.parse(clean);
+
+    // Store in DATA and mark on map
+    DATA[id] = { name: cname, flag: parsed.flag||"🌍", fruits: parsed.fruits };
+    AI_CACHE[id] = true;
+
+    // Colour country as "has data" now
+    gCountries.selectAll(".country").filter(d=>+d.id===id)
+      .classed("has-data",true);
+
+    openCountry(id);
+
+  } catch(err) {
+    const errHTML = `<div class="empty-state" style="padding:24px">
+      <div style="font-size:3rem">😅</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--pink);margin-top:10px">Oops!</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.6">
+        Couldn't load fruit data right now.<br>Check your internet and try again!<br>
+        <span style="font-size:.7rem;opacity:.6">${err.message}</span>
+      </div>
+    </div>`;
+    if(isMobile) document.getElementById("detail-mobile").innerHTML=errHTML;
+    else document.getElementById("detail").innerHTML=errHTML;
   }
 }
 
